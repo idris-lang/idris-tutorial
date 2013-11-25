@@ -1,18 +1,14 @@
 \section{Type Classes}
 \label{sec:classes}
 
-We often want to define functions which work across several different data
-types. For example, we would like arithmetic operators to work on \texttt{Int},
-\texttt{Integer} and \texttt{Float} at the very least. We would like
-\texttt{==} to work on the majority of data types. We would like to be able to
-display different types in a uniform way.
+We often want to define functions which work across several different data types.
+For example, we would like arithmetic operators to work on \texttt{Int}, \texttt{Integer} and \texttt{Float} at the very least.
+We would like \texttt{==} to work on the majority of data types.
+We would like to be able to display different types in a uniform way.
 
-To achieve this, we use a feature which has proved to be effective in Haskell, namely
-\emph{type classes}. To define a type class, we provide a collection of overloaded
-operations which describe the interface for \emph{instances} of that class. A simple example
-is the \texttt{Show} type class, which is defined in the prelude and
-provides an interface for converting values to
-\texttt{String}s:
+To achieve this, we use a feature which has proved to be effective in Haskell, namely \emph{type classes}.
+To define a type class, we provide a collection of overloaded operations which describe the interface for \emph{instances} of that class.
+A simple example is the \texttt{Show} type class, which is defined in the prelude and provides an interface for converting values to \texttt{String}:
 
 \begin{code}
 class Show a where
@@ -20,19 +16,16 @@ class Show a where
 \end{code}
 
 \noindent
-This generates a function of the following type (which we call a \emph{method} of the 
-\texttt{Show} class):
+This generates a function of the following type (which we call a \emph{method} of the  \texttt{Show} class):
 
 \begin{code}
 show : Show a => a -> String
 \end{code}
 
 \noindent
-We can read this as ``under the constraint that \texttt{a} is an instance of \texttt{Show},
-take an \texttt{a} as input and return a \texttt{String}.'' An instance of a class
-is defined with an \texttt{instance} declaration, which provides implementations of
-the function for a specific type. For example, the \texttt{Show} instance for \texttt{Nat}
-could be defined as:
+We can read this as: ``under the constraint that \texttt{a} is an instance of \texttt{Show}, take an input \texttt{a} and return a \texttt{String}.''
+An instance of a class is defined with an \texttt{instance} declaration, which provides implementations of the function for a specific type.
+For example, the \texttt{Show} instance for \texttt{Nat} could be defined as:
 
 \begin{code}
 instance Show Nat where
@@ -47,10 +40,8 @@ Idris> show (S (S (S Z)))
 
 \noindent
 Only one instance of a class can be given for a type --- instances may not overlap.
-Instance declarations can themselves have constraints. For example, to define a
-\texttt{Show} instance for vectors, we need to know that there is a \texttt{Show} 
-instance for the element type, because we are going to use it to convert each element
-to a \texttt{String}:
+Instance declarations can themselves have constraints.
+For example, to define a \texttt{Show} instance for vectors, we need to know that there is a \texttt{Show}  instance for the element type, because we are going to use it to convert each element to a \texttt{String}:
 
 \begin{code}
 instance Show a => Show (Vect n a) where
@@ -72,8 +63,7 @@ instance Show a => Show (Vect n a) where
 
 \subsection{Default Definitions}
 
-The library defines an \texttt{Eq} class which provides an interface for comparing
-values for equality or inequality, with instances for all of the built-in types:
+The library defines an \texttt{Eq} class which provides an interface for comparing values for equality or inequality, with instances for all of the built-in types:
 
 \begin{code}
 class Eq a where
@@ -96,10 +86,8 @@ instance Eq Nat where
 \end{code}
 
 \noindent
-It is hard to imagine many cases where the \texttt{/=} method will be anything other
-than the negation of the result of applying the \texttt{==} method. It is therefore
-convenient to give a default definition for each method in the class
-declaration, in terms of the other method:
+It is hard to imagine many cases where the \texttt{/=} method will be anything other than the negation of the result of applying the \texttt{==} method.
+It is therefore convenient to give a default definition for each method in the class declaration, in terms of the other method:
 
 \begin{code}
 class Eq a where
@@ -111,15 +99,13 @@ class Eq a where
 \end{code}
 
 \noindent
-A minimal complete definition of an \texttt{Eq} instance requires either \texttt{==}
-or \texttt{/=} to be defined, but does not require both. If a method definition is
-missing, and there is a default definition for it, then the default is used instead.
+A minimal complete definition of an \texttt{Eq} instance requires either \texttt{==} or \texttt{/=} to be defined, but does not require both.
+If a method definition is missing, and there is a default definition for it, then the default is used instead.
 
 \subsection{Extending Classes}
 
-Classes can also be extended. A logical next step from an equality relation \texttt{Eq}
-is to define an ordering relation \texttt{Ord}. We can define an \texttt{Ord} class
-which inherits methods from \texttt{Eq} as well as defining some of its own:
+Classes can also be extended. A logical next step from an equality relation \texttt{Eq} is to define an ordering relation \texttt{Ord}.
+We can define an \texttt{Ord} class which inherits methods from \texttt{Eq} as well as defining some of its own:
 
 \begin{code}
 data Ordering = LT | EQ | GT
@@ -140,19 +126,16 @@ class Eq a => Ord a where
 \noindent
 The \texttt{Ord} class allows us to compare two values and determine their ordering. 
 Only the \texttt{compare} method is required; every other method has a default definition.
-Using
-this we can write functions such as \texttt{sort}, a function which sorts a list into
-increasing order, provided that the element type of the list is in the \texttt{Ord} class.
-We give the constraints on the type variables left of the fat arrow \texttt{=>}, and the
-function type to the right of the fat arrow:
+Using this we can write functions such as \texttt{sort}, a function which sorts a list into increasing order, provided that the element type of the list is in the \texttt{Ord} class.
+We give the constraints on the type variables left of the fat arrow \texttt{=>}, and the function type to the right of the fat arrow:
 
 \begin{code}
 sort : Ord a => List a -> List a
 \end{code}
 
 \noindent
-Functions, classes and instances can have multiple constraints. Multiple constaints are
-written in brackets in a comma separated list, for example:
+Functions, classes and instances can have multiple constraints.
+Multiple constaints are written in brackets in a comma separated list, for example:
 
 \begin{code}
 sortAndShow : (Ord a, Show a) => List a -> String
@@ -163,11 +146,10 @@ sortAndShow xs = show (sort xs)
 
 \label{sec:monad}
 
-So far, we have seen single parameter type classes, where the parameter is of type
-\texttt{Type}. In general, there can be any number (greater than 0) of parameters,
-and the parameters can have \remph{any} type.
-If the type of the parameter is not \texttt{Type}, we need to give an explicit type
-declaration. For example:
+So far, we have seen single parameter type classes, where the parameter is of type \texttt{Type}.
+In general, there can be any number (greater than 0) of parameters, and the parameters can have \remph{any} type.
+If the type of the parameter is not \texttt{Type}, we need to give an explicit type declaration.
+For example:
 
 \begin{code}
 class Monad (m : Type -> Type) where
@@ -176,9 +158,8 @@ class Monad (m : Type -> Type) where
 \end{code}
 
 \noindent
-The \texttt{Monad} class allows us to encapsulate binding and computation, and is the
-basis of \texttt{do}-notation introduced in Section \ref{sect:do}. Inside a
-\texttt{do} block, the following syntactic transformations are applied:
+The \texttt{Monad} class allows us to encapsulate binding and computation, and is the basis of \texttt{do}-notation introduced in Section~\ref{sect:do}.
+Inside a \texttt{do} block, the following syntactic transformations are applied:
 
 \begin{itemize}
 \item \texttt{x <- v; e} becomes \texttt{v >>= ($\backslash$x => e)}
@@ -199,8 +180,7 @@ instance Monad Maybe where
 \end{code}
 
 \noindent
-Using this we can, for example, define a function which adds two 
-\texttt{Maybe Int}s, using the monad to encapsulate the error handling:
+Using this we can, for example, define a function which adds two  \texttt{Maybe Int}s, using the monad to encapsulate the error handling:
 
 \begin{code}
 m_add : Maybe Int -> Maybe Int -> Maybe Int
@@ -210,10 +190,8 @@ m_add x y = do x' <- x -- Extract value from x
 \end{code}
 
 \noindent
-This function will extract the values from \texttt{x} and \texttt{y}, if they
-are available, or return \texttt{Nothing} if they are not. Managing the
-\texttt{Nothing} cases is achieved by the \texttt{>>=} operator, hidden by the
-\texttt{do} notation.
+This function will extract the values from \texttt{x} and \texttt{y}, if they are available, or return \texttt{Nothing} if they are not.
+Managing the \texttt{Nothing} cases is achieved by the \texttt{>>=} operator, hidden by the \texttt{do} notation.
 
 \begin{lstlisting}
 *classes> m_add (Just 20) (Just 22) 
@@ -224,8 +202,7 @@ Nothing : Maybe Int
 
 \subsubsection*{Monad comprehensions}
 
-The list comprehension notation we saw in Section \ref{sec:listcomp} is more
-general, and applies to anything which is an instance of \texttt{MonadPlus}:
+The list comprehension notation we saw in Section~\ref{sec:listcomp} is more general, and applies to anything which is an instance of \texttt{MonadPlus}:
 
 \begin{code}
 class Monad m => MonadPlus (m : Type -> Type) where
@@ -234,8 +211,7 @@ class Monad m => MonadPlus (m : Type -> Type) where
 \end{code}
 
 \noindent
-In general, a comprehension takes the form \texttt{[ exp | qual1, qual2, ..., qualn ]} where
-\texttt{quali} can be one of:
+In general, a comprehension takes the form \texttt{[ exp | qual1, qual2, \ldots, qualn ]} where \texttt{quali} can be one of:
 
 \begin{itemize}
 \item A generator \texttt{x <- e}
@@ -244,10 +220,7 @@ In general, a comprehension takes the form \texttt{[ exp | qual1, qual2, ..., qu
 \end{itemize}
 
 \noindent
-To translate a comprehension \texttt{[exp | qual1, qual2, ..., qualn]}, first
-any qualifier
-\texttt{qual} which is a \emph{guard} is translated to \texttt{guard qual}, using
-the following function:
+To translate a comprehension \texttt{[exp | qual1, qual2, \ldots, qualn]}, first any qualifier \texttt{qual} which is a \emph{guard} is translated to \texttt{guard qual}, using the following function:
 
 \begin{code}
 guard : MonadPlus m => Bool -> m ()
@@ -271,13 +244,12 @@ m_add x y = [ x' + y' | x' <- x, y' <- y ]
 \subsection{Idiom brackets}
 
 While \texttt{do} notation gives an alternative meaning to sequencing, idioms give an
-alternative meaning to \emph{application}. The notation and larger example in this
-section is inspired by Conor McBride and Ross Paterson's paper "Applicative
-Programming with Effects"~\cite{idioms}.
+alternative meaning to \emph{application}.
+The notation and larger example in this section is inspired by Conor McBride and Ross Paterson's paper ``Applicative
+Programming with Effects''~\cite{idioms}.
 
-First, let us revisit \texttt{m\_add} above. All it is really doing is applying
-an operator to two values extracted from Maybe Ints. We could abstract out the
-application:
+First, let us revisit \texttt{m\_add} above. All it is really doing is applying an operator to two values extracted from \texttt{Maybe Int}'s.
+We could abstract out the application:
 
 \begin{code}
 m_app : Maybe (a -> b) -> Maybe a -> Maybe b
@@ -286,8 +258,7 @@ m_app _        _        = Nothing
 \end{code} 
 
 \noindent
-Using this, we can write an alternative \texttt{m\_add} which uses this alternative
-notion of function application, with explicit calls to \texttt{m\_app}:
+Using this, we can write an alternative \texttt{m\_add} which uses this alternative notion of function application, with explicit calls to \texttt{m\_app}:
 
 \begin{code}
 m_add' : Maybe Int -> Maybe Int -> Maybe Int
@@ -295,10 +266,8 @@ m_add' x y = m_app (m_app (Just (+)) x) y
 \end{code} 
 
 \noindent
-Rather than having to insert \texttt{m\_app} everywhere there is an
-application, we can use \remph{idiom brackets} to do the job for us. To do
-this, we use the \texttt{Applicative} class, which captures the notion of
-application for a data type:
+Rather than having to insert \texttt{m\_app} everywhere there is an application, we can use \remph{idiom brackets} to do the job for us.
+To do this, we use the \texttt{Applicative} class, which captures the notion of application for a data type:
 
 \begin{code}
 infixl 2 <$> 
@@ -309,8 +278,7 @@ class Applicative (f : Type -> Type) where
 \end{code} 
 
 \noindent
-\texttt{Maybe} is made an instance of \texttt{Applicative} as follows, where
-\texttt{<\$>} is defined in the same way as \texttt{m\_app} above:
+\texttt{Maybe} is made an instance of \texttt{Applicative} as follows, where \texttt{<\$>} is defined in the same way as \texttt{m\_app} above:
 
 \begin{code}
 instance Applicative Maybe where
@@ -321,9 +289,7 @@ instance Applicative Maybe where
 \end{code} 
 
 \noindent
-Using \remph{idiom brackets} we can use this instance as follows, where a function
-application \texttt{[| f a1 ... an |]}
-is translated into \texttt{pure f <\$> a1 <\$> ... <\$> an}:
+Using \remph{idiom brackets} we can use this instance as follows, where a function application \texttt{[| f a1 \dots an |]} is translated into \texttt{pure f <\$> a1 <\$> \dots <\$> an}:
 
 \begin{code}
 m_add' : Maybe Int -> Maybe Int -> Maybe Int
@@ -332,9 +298,8 @@ m_add' x y = [| x + y |]
 
 \subsubsection{An error-handling interpreter}
 
-Idiom notation is commonly useful when defining evaluators. McBride and
-Paterson describe such an evaluator~\cite{idioms}, for a language similar to
-the following:
+Idiom notation is commonly useful when defining evaluators.
+McBride and Paterson describe such an evaluator~\cite{idioms}, for a language similar to the following:
 
 \begin{code}
 data Expr = Var String      -- variables
@@ -343,9 +308,8 @@ data Expr = Var String      -- variables
 \end{code} 
 
 \noindent
-Evaluation will take place relative to a context mapping variables (represented as
-\texttt{String}s) to integer values, and can possibly fail. We define a data type
-\texttt{Eval} to wrap an evaluator:
+Evaluation will take place relative to a context mapping variables (represented as \texttt{String}s) to integer values, and can possibly fail.
+We define a data type \texttt{Eval} to wrap an evaluator:
 
 \begin{code}
 data Eval : Type -> Type where
@@ -353,9 +317,7 @@ data Eval : Type -> Type where
 \end{code} 
 
 \noindent
-Wrapping the evaluator in a data type means we will be able to make it an instance
-of a type class later. We begin by defining a function to retrieve values from
-the context during evaluation:
+Wrapping the evaluator in a data type means we will be able to make it an instance of a type class later. We begin by defining a function to retrieve values from the context during evaluation:
 
 \begin{code}
 fetch : String -> Eval Int
@@ -366,12 +328,8 @@ fetch x = MkEval (\e => fetchVal e) where
 \end{code} 
   
 \noindent
-When defining an evaluator for the language, we will be applying functions in
-the context of an \texttt{Eval}, so it is natural to make \texttt{Eval} an
-instance of \texttt{Applicative}.
-Before \texttt{Eval} can be an instance of
-\texttt{Applicative} it is necessary to make \texttt{Eval} an instance of
-\texttt{Functor}:
+When defining an evaluator for the language, we will be applying functions in the context of an \texttt{Eval}, so it is natural to make \texttt{Eval} an instance of \texttt{Applicative}.
+Before \texttt{Eval} can be an instance of \texttt{Applicative} it is necessary to make \texttt{Eval} an instance of \texttt{Functor}:
 
 \begin{code}
 instance Functor Eval where
@@ -387,8 +345,7 @@ instance Applicative Eval where
 \end{code}
 
 \noindent
-Evaluating an expression can now make use of the idiomatic application to handle
-errors:
+Evaluating an expression can now make use of the idiomatic application to handle errors:
 
 \begin{code}
 eval : Expr -> Eval Int
@@ -403,9 +360,8 @@ runEval env e = case eval e of
 
 \subsection{Named Instances}
 
-It can be desirable to have multiple instances of a type class, for example to provide
-alternative methods for sorting or printing values. To achieve this, instances can
-be \remph{named} as follows:
+It can be desirable to have multiple instances of a type class, for example to provide alternative methods for sorting or printing values.
+To achieve this, instances can be \remph{named} as follows:
 
 \begin{code}
 instance [myord] Ord Nat where
@@ -417,8 +373,7 @@ instance [myord] Ord Nat where
 
 \noindent
 This declares an instance as normal, but with an explicit name, \texttt{myord}.
-The syntax \texttt{compare @\{myord\}} gives an explicit instance to 
-\texttt{compare}, otherwise it would use the default instance for \texttt{Nat}.
+The syntax \texttt{compare @\{myord\}} gives an explicit instance to \texttt{compare}, otherwise it would use the default instance for \texttt{Nat}.
 We can use this, for example, to sort a list of \texttt{Nat}s in reverse.
 Given the following list:
 
@@ -428,8 +383,7 @@ testList = [3,4,1]
 \end{code}
 
 \noindent
-\ldots we can sort it using the default \texttt{Ord} instance, then the named
-instance \texttt{myord} as follows, at the \Idris{} prompt:
+\ldots we can sort it using the default \texttt{Ord} instance, then the named instance \texttt{myord} as follows, at the \Idris{} prompt:
 
 \begin{lstlisting}
 *named_instance> show (sort testList)

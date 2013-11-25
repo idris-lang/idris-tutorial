@@ -1,4 +1,5 @@
-\documentclass[british, final]{article}
+\documentclass[british, final
+              ]{article}
 
 \usepackage[l2tabu,orthodox]{nag}
 \usepackage{fixltx2e}
@@ -18,39 +19,43 @@
 \usepackage{hyperref}
 \usepackage[missing=0.9.10]{gitinfo}
 
+\usepackage{multicol}
+\usepackage{enumitem}
+
 \usepackage{fpmacros}
-\usepackage[numbers]{idrislang}
+\usepackage{idrislang}
+\usepackage{comment}
 
 \input{conf.ltx}
 \input{library.ltx}
 
 \newcommand{\version}{\gitVtagn}
 
-\title{Programming in \Idris{}: a tutorial}
+\title{Programming in \Idris{}: A Tutorial}
 \author{The \Idris{} Community}
 \date{\origdate\today}
 
 \begin{document}
 
-\maketitle
-
+\maketitle%
 \tableofcontents
 \newpage
 
-\input{./content/intro}
-\input{./content/starting}
-\input{./content/typesfuns}
-\input{./content/classes}
-\input{./content/modules}
-\input{./content/interp}
-\input{./content/views}
-\input{./content/theorems}
-\input{./content/provisional}
-\input{./content/syntax}
-\input{./content/miscellany}
-\input{./content/conclusions}
+\input{./content/intro.tex}
+\input{./content/starting.tex}
+\input{./content/typesfuns.tex}
+\input{./content/classes.tex}
+\input{./content/modules.tex}
+\input{./content/interp.tex}
+\input{./content/views.tex}
+\input{./content/theorems.tex}
+\input{./content/provisional.tex}
+\input{./content/syntax.tex}
+\input{./content/miscellany.tex}
+\input{./content/conclusions.tex}
 
+\newpage
 \bibliographystyle{abbrv}
-\bibliography{literature.bib}
+\bibliography{literature}
 
 \end{document}

@@ -1,0 +1,91 @@
+\subsection{Foreign function calls}
+
+For practical programming, it is often necessary to be able to use external libraries, particularly for interfacing with the operating system, file system, networking, etc.\
+\Idris{} provides a lightweight foreign function interface for achieving this, as part of the prelude.
+For this, we assume a certain amount of knowledge of C and the \texttt{gcc} compiler.
+First, we define a datatype which describes the external types we can handle:
+
+\begin{code}
+data FTy = FInt | FFloat | FChar | FString | FPtr | FUnit
+\end{code}
+
+\noindent
+Each of these corresponds directly to a C type.
+Respectively: \texttt{int}, \texttt{double}, \texttt{char}, \texttt{char*}, \texttt{void*} and \texttt{void}.
+There is also a translation to a concrete \Idris{} type, described by the following function:
+
+\begin{code}
+interpFTy : FTy -> Type
+interpFTy FInt    = Int
+interpFTy FFloat  = Float
+interpFTy FChar   = Char
+interpFTy FString = String
+interpFTy FPtr    = Ptr
+interpFTy FUnit   = ()
+\end{code}
+
+\noindent
+A foreign function is described by a list of input types and a return type, which can then be converted to an \Idris{} type:
+
+\begin{code}
+ForeignTy : (xs:List FTy) -> (t:FTy) -> Type
+\end{code}
+
+\noindent
+A foreign function is assumed to be impure, so \texttt{ForeignTy} builds an \texttt{IO} type, for example:
+
+\begin{lstlisting}
+Idris> ForeignTy [FInt, FString] FString
+Int -> String -> IO String : Type
+
+Idris> ForeignTy [FInt, FString] FUnit 
+Int -> String -> IO () : Type
+\end{lstlisting}
+
+\noindent
+We build a call to a foreign function by giving the name of the function, a list of argument types and the return type.
+The built in function \texttt{mkForeign} converts this description to a function callable by \Idris{}:
+
+\begin{code}
+data Foreign : Type -> Type where
+    FFun : String -> (xs:List FTy) -> (t:FTy) -> 
+           Foreign (ForeignTy xs t)
+
+mkForeign : Foreign x -> x
+\end{code}
+
+\noindent
+For example, the \texttt{putStr} function is implemented as follows, as a call to  an external function \texttt{putStr} defined in the run-time system:
+
+\begin{code}
+putStr : String -> IO ()
+putStr x = mkForeign (FFun "putStr" [FString] FUnit) x
+\end{code}
+
+\subsubsection*{Include and linker directives}
+
+Foreign function calls are translated directly to calls to C functions, with appropriate conversion between the \Idris{} representation of a value and the C representation.
+Often this will require extra libraries to be linked in, or extra header and object files.
+This is made possible through the following directives:
+
+\begin{itemize}
+\item \texttt{\%lib \emph{target} "x"} --- include the \texttt{libx} library.
+If the target is \texttt{C} this is equivalent to passing the \texttt{-lx} option to \texttt{gcc}.
+If the target is Java the library will be interpreted as a \texttt{groupId\-:artifactId\-:packaging:version} dependency coordinate for maven.
+\item \texttt{\%include \emph{target} "x"} --- use the header file or import \texttt{x} for the given back end target.
+\item \texttt{\%link \emph{target} "x.o"} --- link with the object file \texttt{x.o} when using the given back end target.
+\item \texttt{\%dynamic "x.so"} --- dynamically link the interpreter with the shared object \texttt{x.so}.
+\end{itemize}
+
+\subsubsection*{Testing foreign function calls}
+Normally, the Idris interpreter (used for typechecking and at the REPL) will not perform IO actions.
+Additionally, as it neither generates C code nor compiles to machine code, the \texttt{\%lib}, \texttt{\%include} and \texttt{\%link} directives have no effect.
+IO actions and FFI calls can be tested using the special REPL command \texttt{:x EXPR}, and C libraries can be dynamically loaded in the interpreter by using the \texttt{:dynamic} command or the \texttt{\%dynamic} directive.
+For example:
+
+\begin{lstlisting}
+Idris> :dynamic libm.so
+Idris> :x unsafePerformIO ((mkForeign (FFun "sin" [FFloat] FFloat)) 1.6)
+0.9995736030415051 : Float
+\end{lstlisting}
+

@@ -1,21 +1,17 @@
 \section{Example: The Well-Typed Interpreter}
 \label{sect:interp}
 
-In this section, we'll use the features we've seen so far to write a larger
-example, an interpreter for a simple functional programming language, with
-variables, function application, binary operators and an \texttt{if...then...else}
-construct. We will use the dependent type system to ensure that any programs
-which can be represented are well-typed. First, let us define the types in the
-language. We have integers, booleans, and functions, represented by \texttt{Ty}:
+In this section, we'll use the features we've seen so far to write a larger example, an interpreter for a simple functional programming language, with variables, function application, binary operators and an \texttt{if...then...else} construct.
+We will use the dependent type system to ensure that any programs which can be represented are well-typed.
+First, let us define the types in the language.
+We have integers, booleans, and functions, represented by \texttt{Ty}:
 
 \begin{code}
 data Ty = TyInt | TyBool | TyFun Ty Ty
 \end{code}
 
 \noindent
-We can write a function to translate these representations to a concrete \Idris{}
-type --- remember that types are first class, so can be calculated just like
-any other value:
+We can write a function to translate these representations to a concrete \Idris{} type --- remember that types are first class, so can be calculated just like any other value:
 
 \begin{code}
 interpTy : Ty -> Type
@@ -25,28 +21,24 @@ interpTy (TyFun A T) = interpTy A -> interpTy T
 \end{code}
 
 \noindent
-We're going to define a representation of our language in such a way that only
-well-typed programs can be represented. We'll index the representations of
-expressions by their type and the types of local variables (the context), which
-we'll be using regularly as an implicit argument, so we define everything
-in a \texttt{using} block:
+We're going to define a representation of our language in such a way that only well-typed programs can be represented.
+We'll index the representations of expressions by their type and the types of local variables (the context), which we'll be using regularly as an implicit argument, so we define everything in a \texttt{using} block:
 
 \begin{code}
 using (G:Vect n Ty)
 \end{code}
 
 \noindent
-The full representation of expressions is given in Figure \ref{exprty}. They are
-indexed by the types of the local variables, and the type of the expression itself:
+The full representation of expressions is given in Listing~\ref{exprty}.
+They are indexed by the types of the local variables, and the type of the expression itself:
 
 \begin{code}
 data Expr : Vect n Ty -> Ty -> Type
 \end{code}
 
 \noindent
-Since expressions are indexed by their type, we can read the typing rules of
-the language from the definitions of the constructors. Let us look at each
-constructor in turn.
+Since expressions are indexed by their type, we can read the typing rules of the language from the definitions of the constructors.
+Let us look at each constructor in turn.
 
 \begin{code}[caption={Expression representation},label=exprty]
 data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
@@ -65,9 +57,7 @@ data Expr : Vect n Ty -> Ty -> Type where
 
 \noindent
 We use a nameless representation for variables --- they are \emph{de Bruijn indexed}.
-Variables are represented by a proof of their membership in the context, 
-\texttt{HasType i G T}, which is a proof that variable \texttt{i} in context 
-\texttt{G} has type \texttt{T}. This is defined as follows:
+Variables are represented by a proof of their membership in the context, \texttt{HasType i G T}, which is a proof that variable \texttt{i} in context  \texttt{G} has type \texttt{T}. This is defined as follows:
 
 \begin{code}
 data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
@@ -76,22 +66,16 @@ data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
 \end{code}
 
 \noindent
-We can treat \remph{stop} as a proof that the most recently defined variable is well-typed,
-and \remph{pop n} as a proof that, if the \texttt{n}th most recently defined variable is
-well-typed, so is the \texttt{n+1}th. In practice, this means we use \texttt{stop} to
-refer to the most recently defined variable, \texttt{pop stop} to refer to the next, and so on,
-via the \texttt{Var} constructor:
+We can treat \emph{stop} as a proof that the most recently defined variable is well-typed, and \emph{pop n} as a proof that, if the \texttt{n}th most recently defined variable is well-typed, so is the \texttt{n+1}th.
+In practice, this means we use \texttt{stop} to refer to the most recently defined variable, \texttt{pop stop} to refer to the next, and so on, via the \texttt{Var} constructor:
 
 \begin{code}
 Var : HasType i G t -> Expr G t
 \end{code}
 
 \noindent
-So, in an expression \texttt{$\backslash$x. $\backslash$y. x y}, 
-the variable \texttt{x} would have a de Bruijn index
-of 1, represented as \texttt{pop stop}, and \texttt{y 0}, represented
-as \texttt{stop}. We find these by counting the number of lambdas between the
-definition and the use.
+So, in an expression \texttt{$\backslash$x. $\backslash$y. x y},  the variable \texttt{x} would have a de Bruijn index of 1, represented as \texttt{pop stop}, and \texttt{y 0}, represented as \texttt{stop}.
+We find these by counting the number of lambdas between the definition and the use.
 
 \noindent
 A value carries a concrete representation of an integer: 
@@ -101,25 +85,22 @@ Val : (x : Int) -> Expr G TyInt
 \end{code}
 
 \noindent
-A lambda creates a function. In the scope of a function of type \texttt{a -> t}, there is
-a new local variable of type \texttt{a}, which is expressed by the context index:
+A lambda creates a function.
+In the scope of a function of type \texttt{a -> t}, there is a new local variable of type \texttt{a}, which is expressed by the context index:
 
 \begin{code}
 Lam : Expr (a :: G) t -> Expr G (TyFun a t)
 \end{code}
 
 \noindent
-Function application produces a value of type \texttt{t} given a function from 
-\texttt{a} to \texttt{t}
-and a value of type \texttt{a}:
+Function application produces a value of type \texttt{t} given a function from  \texttt{a} to \texttt{t} and a value of type \texttt{a}:
 
 \begin{code}
 App : Expr G (TyFun a t) -> Expr G a -> Expr G t
 \end{code}
 
 \noindent
-We allow arbitrary binary operators, where the type of the operator
-informs what the types of the arguments must be:
+We allow arbitrary binary operators, where the type of the operator informs what the types of the arguments must be:
 
 \begin{code}
 Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a -> Expr G b -> 
@@ -127,20 +108,17 @@ Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a -> Expr G b ->
 \end{code}
 
 \noindent
-Finally, if expressions make a choice given a boolean. Each branch must
-have the same type:
+Finally, if expressions make a choice given a boolean.
+Each branch must have the same type:
 
 \begin{code}
 If  : Expr G TyBool -> Expr G a -> Expr G a -> Expr G a
 \end{code}
 
 \noindent
-When we evaluate an \texttt{Expr}, we'll need to know the values in scope, as well as
-their types. \texttt{Env} is an environment, indexed over the types in scope.
-Since an environment is just another form of list, albeit with a strongly specified connection
-to the vector of local variable types, we use the usual \texttt{::} and \texttt{Nil}
-constructors so that we can use the usual list syntax. Given a proof that a variable
-is defined in the context, we can then produce a value from the environment:
+When we evaluate an \texttt{Expr}, we'll need to know the values in scope, as well as their types. \texttt{Env} is an environment, indexed over the types in scope.
+Since an environment is just another form of list, albeit with a strongly specified connection to the vector of local variable types, we use the usual \texttt{::} and \texttt{Nil} constructors so that we can use the usual list syntax.
+Given a proof that a variable is defined in the context, we can then produce a value from the environment:
 
 \begin{code}
 data Env : Vect n Ty -> Type where
@@ -164,9 +142,7 @@ interp env (If x t e)  = if interp env x then interp env t
 \end{code}
 
 \noindent
-Given this, an interpreter (Figure \ref{interpdef})
-is a function which translates an \texttt{Expr} into a
-concrete \Idris{} value with respect to a specific environment:
+Given this, an interpreter (Listing~\ref{interpdef}) is a function which translates an \texttt{Expr} into a concrete \Idris{} value with respect to a specific environment:
 
 \begin{code}
 interp : Env G -> Expr G t -> interpTy t
@@ -187,28 +163,24 @@ interp env (Val x) = x
 \end{code}
 
 \noindent
-Lambdas are more interesting. In this case, we construct a function which
-interprets the scope of the lambda with a new value in the environment. So, a
-function in the object language is translated to an \Idris{} function:
+Lambdas are more interesting.
+In this case, we construct a function which interprets the scope of the lambda with a new value in the environment.
+So, a function in the object language is translated to an \Idris{} function:
 
 \begin{code}
 interp env (Lam sc) = \x => interp (x :: env) sc
 \end{code}
 
 \noindent
-For an application, we interpret the function and its argument and apply it
-directly. We know that interpreting \texttt{f} must produce a function, because of its
-type:
+For an application, we interpret the function and its argument and apply it directly. We know that interpreting \texttt{f} must produce a function, because of its type:
 
 \begin{code}
 interp env (App f s) = interp env f (interp env s)
 \end{code}
 
 \noindent
-Operators and interpreters are, again, direct translations into the equivalent
-\Idris{} constructs. For operators, we apply the function to its operands directly,
-and for \texttt{If}, we apply the \Idris{} \texttt{if...then...else} construct
-directly.
+Operators and interpreters are, again, direct translations into the equivalent \Idris{} constructs.
+For operators, we apply the function to its operands directly, and for \texttt{If}, we apply the \Idris{} \texttt{if...then...else} construct directly.
 
 \begin{code}
 interp env (Op op x y) = op (interp env x) (interp env y)
@@ -226,9 +198,7 @@ add = Lam (Lam (Op (+) (Var stop) (Var (pop stop))))
 \end{code}
 
 \noindent
-More interestingly, we can write a factorial function. First, we write a \emph{lazy}
-version of the \texttt{App} constructor, so that the recursive branch will only
-be evaluated if necessary:
+More interestingly, we can write a factorial function. First, we write a \emph{lazy} version of the \texttt{App} constructor, so that the recursive branch will only be evaluated if necessary:
 
 \begin{code} 
 app : |(f : Expr G (TyFun a t)) -> Expr G a -> Expr G t
@@ -236,12 +206,8 @@ app = \f, a => App f a
 \end{code}
 
 \noindent
-The vertical bar annotation before the \texttt{f} argument indicates that this
-argument should be evaluated lazily when \texttt{app} is applied --- that is, the
-argument will be evaluated only when needed.
-Then \texttt{fact} 
-(i.e. \texttt{$\backslash$x. if (x == 0) then 1 else (fact (x-1) * x)})
-is written as follows:
+The vertical bar annotation before the \texttt{f} argument indicates that this argument should be evaluated lazily when \texttt{app} is applied --- that is, the argument will be evaluated only when needed.
+Then \texttt{fact}  (i.e. \texttt{$\backslash$x. if (x == 0) then 1 else (fact (x-1) * x)}) is written as follows:
 
 \begin{code}
 fact : Expr G (TyFun TyInt TyInt)
@@ -250,8 +216,7 @@ fact = Lam (If (Op (==) (Var stop) (Val 0))
                                (Var stop)))
 \end{code}
 
-To finish, we write a \texttt{main} program which interprets the factorial function
-on user input:
+To finish, we write a \texttt{main} program which interprets the factorial function on user input:
 
 \begin{code}
 main : IO ()
@@ -261,10 +226,8 @@ main = do putStr "Enter a number: "
 \end{code}
 
 \noindent
-Here, \texttt{cast} is an overloaded function which converts a value from one
-type to another if possible. Here, it converts a string to
-an integer, giving 0 if the input is invalid. An example run of this program
-at the \Idris{} interactive environment is shown in Figure \ref{factrun}.
+Here, \texttt{cast} is an overloaded function which converts a value from one type to another if possible. Here, it converts a string to an integer, giving 0 if the input is invalid.
+An example run of this program at the \Idris{} interactive environment is shown in Listing~\ref{factrun}.
 
 \begin{lstlisting}[caption={Running the well-typed interpreter}, label=factrun, escapechar=^]
 $ idris interp.idr  
@@ -283,8 +246,7 @@ Enter a number: 6
 
 \subsubsection*{Aside: \texttt{cast}}
 
-The prelude defines a type class \texttt{Cast} which allows conversion between
-types:
+The prelude defines a type class \texttt{Cast} which allows conversion between types:
 
 \begin{code}
 class Cast from to where
@@ -292,11 +254,9 @@ class Cast from to where
 \end{code} 
 
 \noindent
-It is a \emph{multi-parameter} type class, defining the source type and object
-type of the cast. It must be possible for the type checker to infer \remph{both}
-parameters at the point where the cast is applied.
-There are casts defined between all of the primitive types, as far as
-they make sense.
+It is a \emph{multi-parameter} type class, defining the source type and object type of the cast.
+It must be possible for the type checker to infer \emph{both} parameters at the point where the cast is applied.
+There are casts defined between all of the primitive types, as far as they make sense.
 
 \subsection{Unit testing}
 
@@ -308,9 +268,9 @@ data so : Bool -> Type where
 \end{code}
 
 \noindent
-This requires its parameter to be a \texttt{True} value. One simple application of this
-is to perform unit testing of functions at compile time. For example, we know that 
-\texttt{4! = 24} so we can set up a test case as follows:
+This requires its parameter to be a \texttt{True} value.
+One simple application of this is to perform unit testing of functions at compile time.
+For example, we know that  \texttt{4! = 24} so we can set up a test case as follows:
 
 \begin{code}
 unitTestFac : so (interp [] fact 4 == 24)
@@ -318,8 +278,7 @@ unitTestFac = oh
 \end{code} 
 
 \noindent
-For the program to compile, the test case must pass. If we change \texttt{24} to \texttt{25},
-say, we will get an error message like the following:
+For the program to compile, the test case must pass. If we change \texttt{24} to \texttt{25}, say, we will get an error message like the following:
 
 \begin{lstlisting}
 Type checking ./interp.idr
@@ -328,5 +287,4 @@ interp.idr:64:Can't unify so True with so False
 Specifically:
 	 Can't unify True with False
 \end{lstlisting} 
-
 

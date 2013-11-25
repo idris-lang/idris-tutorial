@@ -1,0 +1,17 @@
+\subsection{Literate programming}
+
+Like Haskell, \Idris{} supports \emph{literate} programming.
+If a file has an extension of \texttt{.lidr} then it is assumed to be a literate file.
+In literate programs, everything is assumed to be a comment unless the line begins with a greater than sign \texttt{>}, for example:
+
+\begin{lstlisting}
+> module literate
+
+This is a comment. The main program is below
+
+> main : IO ()
+> main = putStrLn "Hello literate world!\n"
+\end{lstlisting}
+
+\noindent
+An additional restriction is that there must be a blank line between a program line (beginning with \texttt{>}) and a comment line (beginning with any other character).

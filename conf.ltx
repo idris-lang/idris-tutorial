@@ -15,3 +15,26 @@
     filecolor=black,
     urlcolor=black
 }
+
+% Enumitem Config
+\newlist{inparaenum}{enumerate*}{1}
+\setlist[inparaenum,1]{label=(\alph*)}
+
+\newlist{inparadesc}{description*}{1}
+\setlist[inparadesc,1]{font=\bfseries}
+
+% Compact Lists
+\newlist{compactitem}{itemize}{3}
+\setlist[compactitem]{topsep=0pt,partopsep=0pt,itemsep=0pt,parsep=0pt}
+\setlist[compactitem,1]{label=\textbullet}
+\setlist[compactitem,2]{label=--}
+\setlist[compactitem,3]{label=*}
+
+\newlist{compactdesc}{description}{3}
+\setlist[compactdesc]{topsep=0pt,partopsep=0pt,itemsep=0pt,parsep=0pt}
+
+\newlist{compactenum}{enumerate}{3}
+\setlist[compactenum]{topsep=0pt,partopsep=0pt,itemsep=0pt,parsep=0pt}
+\setlist[compactenum,1]{label=\arabic*}
+\setlist[compactenum,2]{label=\alph*}
+\setlist[compactenum,3]{label=\roman*}

@@ -1,40 +1,19 @@
-PAPER = idris-tutorial
+TUTORIAL = idris-tutorial
+DATE     = ${shell date +%F}
+TUT_PDF  = ${DATE}-${TUTORIAL}.pdf
 
-all: ${PAPER}.pdf
+all: tutorial clean
 
-TEXFILES = ${PAPER}.tex content/*.tex
+tutorial:
+	latexmk -gg -pdf -bibtex-cond ${TUTORIAL}.tex
 
-DIAGS = 
+version: tutorial
+	mv ${TUTORIAL}.pdf ${TUT_PDF}
 
-SOURCES = ${TEXFILES} ${DIAGS} macros.ltx library.ltx literature.bib
+clean:
+	latexmk -c
 
-DITAA = java -jar ~/Downloads/ditaa.jar
+cthulhu:
+	latexmk -C
+	rm -rf ${TUT_PDF}
 
-${PAPER}.pdf: ${SOURCES}
-	pdflatex ${PAPER}
-	-bibtex ${PAPER}
-	-pdflatex ${PAPER}
-	-pdflatex ${PAPER}
-
-${PAPER}.ps: ${PAPER}.dvi
-	dvips -o ${PAPER}.ps ${PAPER}
-
-${PAPER}.dvi: $(SOURCES)
-	-latex ${PAPER}
-	-bibtex ${PAPER}
-	-latex ${PAPER}
-	-latex ${PAPER}
-
-progress: .PHONY
-	wc -w ${TEXFILES}
-
-%.png : %.diag
-	$(DITAA) -o -E $<
-
-todropbox: .PHONY
-	cp ${SOURCES} ~/Dropbox/TeX/idris-tutorial
-
-fromdropbox: .PHONY
-	cp ~/Dropbox/TeX/idris-tutorial/* .
-
-.PHONY:

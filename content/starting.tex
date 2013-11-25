@@ -2,14 +2,12 @@
 
 \subsection{Prerequisites} 
 
-Before installing \Idris{}, you will need to make sure you have all of the necessary
-libraries and tools. You will need:
+Before installing \Idris{}, you will need to make sure you have all of the necessary libraries and tools.
+You will need:
 
 \begin{itemize}
-\item A fairly recent Haskell platform. Version 2010.1.0.0.1 is currently
-sufficiently recent.
-\item The GNU multiprecision arithmetic library, GMP, available from MacPorts and
-all major Linux distributions.
+\item A fairly recent Haskell platform. Version 2010.1.0.0.1 is currently sufficiently recent.
+\item The GNU multiprecision arithmetic library, GMP, available from MacPorts and all major Linux distributions.
 \end{itemize}
 
 \subsection{Downloading and Installing}
@@ -22,13 +20,9 @@ cabal update; cabal install idris
 
 \noindent
 This will install the latest version released on Hackage, along with any dependencies. 
-If, however, you would like the most up
-to date development version, you can find it on GitHub at
-\url{https://github.com/edwinb/Idris-dev}.
+If, however, you would like the most up to date development version, you can find it on GitHub at \url{https://github.com/edwinb/Idris-dev}.
 
-To check that installation has succeeded, and to write your first \Idris{}
-program, create a file called ``\texttt{hello.idr}'' containing the following
-text:
+To check that installation has succeeded, and to write your first \Idris{} program, create a file called ``\texttt{hello.idr}'' containing the following text:
 
 \begin{code}
 module Main
@@ -38,10 +32,9 @@ main = putStrLn "Hello world"
 \end{code}
 
 \noindent
-If you are familiar with Haskell, it should be fairly clear what the program is doing
-and how it works, but if not, we will explain the details later.
-You can compile the program to an executable by entering \texttt{idris hello.idr -o hello}
-at the shell prompt. This will create an executable called \texttt{hello}, which you can run:
+If you are familiar with Haskell, it should be fairly clear what the program is doing and how it works, but if not, we will explain the details later.
+You can compile the program to an executable by entering \texttt{idris hello.idr -o hello} at the shell prompt. 
+This will create an executable called \texttt{hello}, which you can run:
 
 \begin{lstlisting}[language=bash]
 $ idris hello.idr -o hello
@@ -50,8 +43,7 @@ Hello world
 \end{lstlisting}
 
 \noindent
-Note that the \texttt{\$} indicates the shell prompt! Some useful options to the
-\texttt{idris} command are:
+Note that the \texttt{\$} indicates the shell prompt! Some useful options to the \Idris{} command are:
 
 \begin{itemize}
 \item \texttt{-o prog} to compile to an executable called \texttt{prog}.
@@ -60,10 +52,10 @@ interactive environment.
 \item \texttt{--help} display usage summary and command line options
 \end{itemize}
 
-\subsection{The interactive environment}
+\subsection{The Interactive Environment}
 
-Entering \texttt{idris} at the shell prompt starts up the interactive
-environment. You should see something like the following:
+Entering \texttt{idris} at the shell prompt starts up the interactive environment.
+You should see something like the following:
 
 \begin{lstlisting}[escapechar=^]
 $ idris
@@ -77,12 +69,8 @@ Idris>
 \end{lstlisting}
 
 \noindent
-This gives a \texttt{ghci}-style interface which allows evaluation of expressions,
-as well as type checking expressions, theorem proving, compilation, editing
-and various other operations. \texttt{:?} gives a list of supported commands,
-as shown in Figure \ref{cmds}. Figure \ref{run1} shows an example run in which
-\texttt{hello.idr} is loaded, the type of \texttt{main} is checked and then
-the program is compiled to the executable \texttt{hello}.
+This gives a \texttt{ghci}-style interface which allows evaluation of expressions, as well as type checking expressions, theorem proving, compilation, editing and various other operations. \texttt{:?} gives a list of supported commands, as shown in Listing~\ref{cmds}.
+Listing~\ref{run1} shows an example run in which \texttt{hello.idr} is loaded, the type of \texttt{main} is checked and then the program is compiled to the executable \texttt{hello}.
 
 \begin{lstlisting}[caption={Interactive environment commands}, label=cmds, escapechar=^]
 Idris version ^\version{}^
@@ -93,6 +81,7 @@ Idris version ^\version{}^
    <expr>                      Evaluate an expression
    :t              <expr>      Check the type of an expression
    :miss :missing  <name>      Show missing clauses
+   :doc            <name>      Show internal documentation
    :i :info        <name>      Display information about a type class
    :total          <name>      Check the totality of a name
    :r :reload                  Reload current file
@@ -139,7 +128,6 @@ Hello world
 \end{lstlisting}
 
 \noindent
-Type checking a file, if successful, creates a bytecode version of the file (in
-this case \texttt{hello.ibc}) to speed up loading in future. The bytecode is
-regenerated if the source file changes.
+Type checking a file, if successful, creates a bytecode version of the file (in this case \texttt{hello.ibc}) to speed up loading in future.
+The bytecode is regenerated if the source file changes.
 

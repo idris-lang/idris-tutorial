@@ -1,0 +1,72 @@
+\subsection{Auto implicit arguments}
+
+We have already seen implicit arguments, which allows arguments to be omitted when they can be inferred by the type checker, e.g.\
+
+\begin{code}
+index : {a:Type} -> {n:Nat} -> Fin n -> Vect n a -> a
+\end{code}
+
+\noindent
+In other situations, it may be possible to infer arguments not by type checking but by searching the context for an appropriate value, or constructing a proof.
+For example, the following definition of \texttt{head} which requires a proof that the list is non-empty:
+
+\begin{code}
+isCons : List a -> Bool
+isCons [] = False
+isCons (x :: xs) = True
+
+head : (xs : List a) -> (isCons xs = True) -> a
+head (x :: xs) _ = x
+\end{code} 
+
+\noindent
+If the list is statically known to be non-empty, either because its value is known or because a proof already exists in the context, the proof can be constructed automatically.
+Auto implicit arguments allow this to happen silently.
+We define \texttt{head} as follows:
+
+\begin{code}
+head : (xs : List a) -> {auto p : isCons xs = True} -> a
+head (x :: xs) = x
+\end{code} 
+
+\noindent
+The \texttt{auto} annotation on the implicit argument means that \Idris{} will attempt to fill in the implicit argument using the \texttt{trivial} tactic, which searches through the context for a proof, and tries to solve with \texttt{refl} if a proof is not found.
+Now when \texttt{head} is applied, the proof can be omitted.
+In the case that a proof is not found, it can be provided explicitly as normal:
+
+\begin{code}
+head xs {p = ?headProof} 
+\end{code} 
+
+\noindent
+More generally, we can fill in implicit arguments with a default value by annotating them with \texttt{default}.
+The definition above is equivalent to:
+
+\begin{code}
+head : (xs : List a) -> 
+       {default proof { trivial; } p : isCons xs = True} -> a
+head (x :: xs) = x
+\end{code} 
+
+\subsection{Implicit conversions}
+
+\Idris{} supports the creation of \emph{implicit conversions}, which allow automatic conversion of values from one type to another when required to make a term type correct.
+This is intended to increase convenience and reduce verbosity. A contrived but simple example is the following:
+
+\begin{code}
+implicit intString : Int -> String
+intString = show
+  
+test : Int -> String
+test x = "Number " ++ x
+\end{code}
+
+\noindent
+In general, we cannot append an \texttt{Int} to a \texttt{String}, but the implicit conversion function \texttt{intString} can convert \texttt{x} to a \texttt{String}, so the definition of \texttt{test} is type correct. 
+An implicit conversion is implemented just like any other function, but given the \texttt{implicit} modifier, and restricted to one explicit argument.
+
+Only one implicit conversion will be applied at a time.
+That is, implicit conversions cannot be chained.
+Implicit conversions of simple types, as above, are however discouraged!
+More commonly, an implicit conversion would be used to reduce verbosity in an embedded domain specific language, or to hide details of a proof.
+Such examples are beyond the scope of this tutorial.
