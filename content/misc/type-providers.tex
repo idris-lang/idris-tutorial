@@ -1,5 +1,5 @@
-
 \subsection{Type Providers}
+
 Idris type providers, inspired by F\#'s type providers, are a means of making our types be ``about'' something in the world outside of Idris.
 For example, given a type that represents a database schema and a query that is checked against it, a type provider could read the schema of a real database during type checking.
 
@@ -40,7 +40,8 @@ foo = 2
 \end{code}
 
 \noindent
-If the file named \texttt{theType} consists of the word \texttt{Int}, then \texttt{foo} will be an \texttt{Int}. Otherwise, it will be a \texttt{Nat}.
+If the file named \texttt{theType} consists of the word \texttt{Int}, then \texttt{foo} will be an \texttt{Int}.
+Otherwise, it will be a \texttt{Nat}.
 When Idris encounters the directive, it first checks that the provider expression \texttt{fromFile "theType"} has type \texttt{IO (Provider Type)}.
 Next, it executes the provider. If the result is \texttt{Provide t}, then \texttt{T1} is defined as \texttt{t}. 
 Otherwise, the result is an error.

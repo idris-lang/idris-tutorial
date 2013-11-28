@@ -157,7 +157,8 @@ In this case, we can normalise the goal with the \texttt{compute} tactic:
 \end{lstlisting}
 
 \noindent
-Now we have to prove that \texttt{Z} equals \texttt{Z}, which is easy to prove by \texttt{refl}. To apply a function, such as \texttt{refl}, we use \texttt{refine}  which introduces subgoals for each of the function's explicit arguments (\texttt{refl} has none):
+Now we have to prove that \texttt{Z} equals \texttt{Z}, which is easy to prove by \texttt{refl}.
+To apply a function, such as \texttt{refl}, we use \texttt{refine} which introduces subgoals for each of the function's explicit arguments (\texttt{refl} has none):
 
 \begin{lstlisting}
 -plusredZ_Z> refine refl
@@ -232,8 +233,7 @@ We can achieve this with the \texttt{rewrite} tactic:
 \end{lstlisting}
 
 \noindent
-The \texttt{rewrite} tactic takes an equality proof as an argument, and tries to rewrite
-the goal using that proof. Here, it results in an equality which is trivially provable:
+The \texttt{rewrite} tactic takes an equality proof as an argument, and tries to rewrite the goal using that proof. Here, it results in an equality which is trivially provable:
 
 \begin{lstlisting}
 -plusredZ_S> trivial
@@ -293,7 +293,7 @@ theorems.idr:25:empty2 is possibly not total due to recursive path empty2
 \end{lstlisting} 
 
 \noindent
-Reassuringly, our proof in Section \ref{sect:empty} that the zero and successor constructors are disjoint is total:
+Reassuringly, our proof in Section~\ref{sect:empty} that the zero and successor constructors are disjoint is total:
 
 \begin{lstlisting}
 *theorems> :total disjoint
@@ -327,3 +327,4 @@ All functions \emph{after} a \texttt{\%default total} declaration are required t
 Correspondingly, after a \texttt{\%default partial} declaration, the requirement is relaxed.
 
 Finally, the compiler flag \texttt{--warnpartial} causes \Idris{} to print a warning for any undeclared partial function.
+

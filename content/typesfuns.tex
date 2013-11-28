@@ -74,7 +74,7 @@ infixr 10 ::
 \end{code}
 
 \noindent
-Functions, data constructors and type constuctors may all be given infix operators as names.
+Functions, data constructors and type constructors may all be given infix operators as names.
 They may be used in prefix form if enclosed in brackets, e.g.\ \tDC{(::)}.
 Infix operators can use any of the symbols:
 
@@ -166,7 +166,7 @@ foo x = case isLT of
 
 \noindent
 In general, functions defined in a \texttt{where} clause need a type declaration just like any top level function.
-However, the type declaration for a function \texttt{f} \remph{can} be omitted if:
+However, the type declaration for a function \texttt{f} \emph{can} be omitted if:
 
 \begin{itemize}
 \item \texttt{f} appears in the right hand side of the top level definition 
@@ -216,7 +216,8 @@ Each constructor targets a different part of the family of types. \tDC{Nil} can 
 In the type of \tDC{::}, we state explicitly that an element of type \texttt{a} and a tail of type \texttt{Vect k a} (i.e., a vector of length \texttt{k}) combine to make a vector of length \texttt{S k}.
 
 We can define functions on dependent types such as \tTC{Vect} in the same way as on simple types such as \tTC{List} and \tTC{Nat} above, by pattern matching.
-The type of a function over \tTC{Vect} will describe what happens to the lengths of the vectors involved. For example, \tFN{++}, defined in the library, appends two \tTC{Vect}s:
+The type of a function over \tTC{Vect} will describe what happens to the lengths of the vectors involved.
+For example, \tFN{++}, defined in the library, appends two \tTC{Vect}s:
 
 \begin{code}
 (++) : Vect n a -> Vect m a -> Vect (n + m) a
@@ -399,7 +400,7 @@ main = putStrLn "Hello world"
 
 
 \noindent
-The type of \texttt{putStrLn} explains that it takes a string, and returns an element of the unit type () via an I/O action.
+The type of \texttt{putStrLn} explains that it takes a string, and returns an element of the unit type \texttt{()} via an I/O action.
 There is a variant \texttt{putStr} which outputs a string without a newline:
 
 \begin{code}
@@ -463,9 +464,9 @@ As we will see later, \texttt{do} notation is more general than this, and can be
 
 \subsection{Useful Data Types}
 
-\Idris{} includes a number of useful data types and library functions (see the \texttt{lib/} directory in the distribution).
+\Idris{} includes a number of useful data types and library functions (see the \texttt{libs/} directory in the distribution).
 This chapter describes a few of these.
-The functions described here are imported automatically by every \Idris{} program, as part of \texttt{prelude.idr}.
+The functions described here are imported automatically by every \Idris{} program, as part of \texttt{Prelude.idr}.
 
 \subsubsection{\texttt{List} and \texttt{Vect}}
 
@@ -526,7 +527,7 @@ You'll find these examples in \texttt{usefultypes.idr} in the \texttt{examples/}
 
 
 \noindent
-For more details of the functions available on \texttt{List} and \texttt{Vect}, look in the library, in \texttt{prelude/list.idr} and \texttt{prelude/vect.idr} respectively.
+For more details of the functions available on \texttt{List} and \texttt{Vect}, look in the library, in \texttt{libs/prelude/list.idr} and \texttt{libs/prelude/vect.idr} respectively.
 Functions include filtering, appending, reversing, and so on.
 Also remember that \Idris{} is still in development, so if you don't see the function you need, please feel free to add it and submit a patch!
 
@@ -543,7 +544,7 @@ One way would be to use an anonymous function:
 
 \noindent
 The notation \texttt{$\backslash$x => val} constructs an anonymous function which takes one argument, \texttt{x} and returns the expression \texttt{val}.
-Anonymous functions may take several arguments, separated by commas, e.g.\ \texttt{$\backslash$x, y, z => val}. Arguments may also be given explicit types, e.g. \texttt{$\backslash$x : Int => x * 2}, and can pattern match, e.g.\ \texttt{$\backslash$ (x, y) => x + y}.
+Anonymous functions may take several arguments, separated by commas, e.g.\ \texttt{$\backslash$x, y, z => val}. Arguments may also be given explicit types, e.g.\ \texttt{$\backslash$x : Int => x * 2}, and can pattern match, e.g.\ \texttt{$\backslash$ (x, y) => x + y}.
 We could also use an operator section:
 
 \begin{lstlisting}
@@ -559,7 +560,8 @@ Similarly, \texttt{(2*)} would expand to \texttt{$\backslash$x => 2 * x}.
 
 \subsubsection{Maybe}
 
-\texttt{Maybe} describes an optional value. Either there is a value of the given type, or there isn't:
+\texttt{Maybe} describes an optional value.
+Either there is a value of the given type, or there isn't:
 
 \begin{code}
 data Maybe a = Just a | Nothing
@@ -579,7 +581,7 @@ list_lookup (S k) (x :: xs) = list_lookup k xs
 
 
 \noindent
-The \texttt{maybe} function is used to process values of type \texttt{Maybe},  either by applying a function to the value, if there is one, or by providing a default value:
+The \texttt{maybe} function is used to process values of type \texttt{Maybe}, either by applying a function to the value, if there is one, or by providing a default value:
 
 \begin{code}
 maybe : Maybe a -> |(default:b) -> (a -> b) -> b
@@ -625,7 +627,7 @@ data Exists : (A : Type) -> (P : A -> Type) -> Type where
 \end{code}
 
 \noindent
-Again, there is syntactic sugar for this. \texttt{(a : A ** P)} is the type of a pair of A and P, where the name \texttt{a} can occur inside P.
+Again, there is syntactic sugar for this. \texttt{(a : A ** P)} is the type of a pair of A and P, where the name \texttt{a} can occur inside \texttt{P}.
 \texttt{( a ** p )}  constructs a value of this type. For example, we can pair a number with a  \texttt{Vect} of a particular length.
 
 \begin{code}
@@ -670,8 +672,7 @@ filter p Nil = (_ ** [])
 
 
 \noindent
-In the \texttt{::} case, we need to inspect the result of a recursive call to 
-\texttt{filter} to extract the length and the vector from the result.
+In the \texttt{::} case, we need to inspect the result of a recursive call to \texttt{filter} to extract the length and the vector from the result.
 To do this, we use \texttt{with} notation, which allows pattern matching on intermediate values:
 
 \begin{code}
@@ -691,10 +692,9 @@ data so : Bool -> Type where
     oh : so True
 \end{code}
  
-
 \noindent
 This is most useful for providing a static guarantee that a dynamic check has been made.
-For example, we might provide a safe interface to a function which draws a pixel on a graphical display as follows, where \texttt{so (inBounds x y)} guarantees that  the point \texttt{(x,y)} is within the bounds of a 640x480 window:
+For example, we might provide a safe interface to a function which draws a pixel on a graphical display as follows, where \texttt{so (inBounds x y)} guarantees that  the point \texttt{(x,y)} is within the bounds of a $640\times480$ window:
 
 \begin{code}
 inBounds : Int -> Int -> Bool
@@ -720,8 +720,7 @@ mirror xs = let xs' = rev xs in
 
 \noindent
 We can do simple pattern matching in \texttt{let} bindings too.
-For example, we can extract
-fields from a record as follows, as well as by pattern matching at the top level:
+For example, we can extract fields from a record as follows, as well as by pattern matching at the top level:
 
 \begin{code}
 data Person = MkPerson String Int

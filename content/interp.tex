@@ -116,7 +116,8 @@ If  : Expr G TyBool -> Expr G a -> Expr G a -> Expr G a
 \end{code}
 
 \noindent
-When we evaluate an \texttt{Expr}, we'll need to know the values in scope, as well as their types. \texttt{Env} is an environment, indexed over the types in scope.
+When we evaluate an \texttt{Expr}, we'll need to know the values in scope, as well as their types.
+\texttt{Env} is an environment, indexed over the types in scope.
 Since an environment is just another form of list, albeit with a strongly specified connection to the vector of local variable types, we use the usual \texttt{::} and \texttt{Nil} constructors so that we can use the usual list syntax.
 Given a proof that a variable is defined in the context, we can then produce a value from the environment:
 
@@ -172,7 +173,8 @@ interp env (Lam sc) = \x => interp (x :: env) sc
 \end{code}
 
 \noindent
-For an application, we interpret the function and its argument and apply it directly. We know that interpreting \texttt{f} must produce a function, because of its type:
+For an application, we interpret the function and its argument and apply it directly.
+We know that interpreting \texttt{f} must produce a function, because of its type:
 
 \begin{code}
 interp env (App f s) = interp env f (interp env s)
@@ -198,7 +200,8 @@ add = Lam (Lam (Op (+) (Var stop) (Var (pop stop))))
 \end{code}
 
 \noindent
-More interestingly, we can write a factorial function. First, we write a \emph{lazy} version of the \texttt{App} constructor, so that the recursive branch will only be evaluated if necessary:
+More interestingly, we can write a factorial function.
+First, we write a \emph{lazy} version of the \texttt{App} constructor, so that the recursive branch will only be evaluated if necessary:
 
 \begin{code} 
 app : |(f : Expr G (TyFun a t)) -> Expr G a -> Expr G t
@@ -207,7 +210,7 @@ app = \f, a => App f a
 
 \noindent
 The vertical bar annotation before the \texttt{f} argument indicates that this argument should be evaluated lazily when \texttt{app} is applied --- that is, the argument will be evaluated only when needed.
-Then \texttt{fact}  (i.e. \texttt{$\backslash$x. if (x == 0) then 1 else (fact (x-1) * x)}) is written as follows:
+Then \texttt{fact} (i.e.\ \texttt{$\backslash$x. if (x == 0) then 1 else (fact (x-1) * x)}) is written as follows:
 
 \begin{code}
 fact : Expr G (TyFun TyInt TyInt)
@@ -226,7 +229,8 @@ main = do putStr "Enter a number: "
 \end{code}
 
 \noindent
-Here, \texttt{cast} is an overloaded function which converts a value from one type to another if possible. Here, it converts a string to an integer, giving 0 if the input is invalid.
+Here, \texttt{cast} is an overloaded function which converts a value from one type to another if possible.
+Here, it converts a string to an integer, giving 0 if the input is invalid.
 An example run of this program at the \Idris{} interactive environment is shown in Listing~\ref{factrun}.
 
 \begin{lstlisting}[caption={Running the well-typed interpreter}, label=factrun, escapechar=^]

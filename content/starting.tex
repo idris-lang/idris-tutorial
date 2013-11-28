@@ -7,7 +7,7 @@ You will need:
 
 \begin{itemize}
 \item A fairly recent Haskell platform. Version 2010.1.0.0.1 is currently sufficiently recent.
-\item The GNU multiprecision arithmetic library, GMP, available from MacPorts and all major Linux distributions.
+\item The \emph{GNU Multiple Precision Arithmetic Library} (GMP) is available from MacPorts and all major Linux distributions.
 \end{itemize}
 
 \subsection{Downloading and Installing}
@@ -20,7 +20,7 @@ cabal update; cabal install idris
 
 \noindent
 This will install the latest version released on Hackage, along with any dependencies. 
-If, however, you would like the most up to date development version, you can find it on GitHub at \url{https://github.com/edwinb/Idris-dev}.
+If, however, you would like the most up to date development version, you can find it on GitHub at: \url{https://github.com/edwinb/Idris-dev}.
 
 To check that installation has succeeded, and to write your first \Idris{} program, create a file called ``\texttt{hello.idr}'' containing the following text:
 
@@ -69,7 +69,8 @@ Idris>
 \end{lstlisting}
 
 \noindent
-This gives a \texttt{ghci}-style interface which allows evaluation of expressions, as well as type checking expressions, theorem proving, compilation, editing and various other operations. \texttt{:?} gives a list of supported commands, as shown in Listing~\ref{cmds}.
+This gives a \texttt{ghci}-style interface which allows evaluation of, as well as type checking of, expressions; theorem proving, compilation; editing; and various other operations.
+The command \texttt{:?} gives a list of supported commands, as shown in Listing~\ref{cmds}.
 Listing~\ref{run1} shows an example run in which \texttt{hello.idr} is loaded, the type of \texttt{main} is checked and then the program is compiled to the executable \texttt{hello}.
 
 \begin{lstlisting}[caption={Interactive environment commands}, label=cmds, escapechar=^]

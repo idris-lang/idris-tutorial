@@ -30,7 +30,7 @@ using (G : Vect n Ty)
             Expr G c
       If  : Expr G TyBool -> Expr G a -> Expr G a -> Expr G a
 
-  interp : Env G -> {static} Expr G t -> interpTy t
+  interp : Env G -> [static] Expr G t -> interpTy t
   interp env (Var i)     = lookup i env
   interp env (Val x)     = x
   interp env (Lam sc)    = \x => interp (x :: env) sc

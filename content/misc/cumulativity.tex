@@ -27,9 +27,8 @@ Type : Type 1 : Type 2 : Type 3 : ...
 
 \noindent
 Universes are \emph{cumulative}, that is, if \texttt{x : Type n} we can also have that \texttt{x : Type m}, as long as \texttt{n < m}. 
-The typechecker generates such universe  constraints and reports an error if any inconsistencies are found.
-Ordinarily, a
-programmer does not need to worry about this, but it does prevent (contrived) programs such as the following:
+The typechecker generates such universe constraints and reports an error if any inconsistencies are found.
+Ordinarily, a programmer does not need to worry about this, but it does prevent (contrived) programs such as the following:
 
 \begin{code}
 myid : (a : Type) -> a -> a

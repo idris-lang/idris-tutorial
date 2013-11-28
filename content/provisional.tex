@@ -27,7 +27,7 @@ parity (S (S k)) with (parity k)
 
 \noindent
 This simply states that zero is even, one is odd, and recursively, the parity of \texttt{k+2} is the same as the parity of \texttt{k}. 
-Explicitly marking the value of \texttt{n} in even and odd is necessary to help type inference.
+Explicitly marking the value of \texttt{n} is even and odd is necessary to help type inference.
 Unfortunately, the type checker rejects this:
 
 \begin{code}
@@ -51,7 +51,7 @@ There are two main reasons why they are useful.
 \end{itemize}
 
 \noindent
-Provisional definitions are written in the same way as ordinary definitions, except that they introduce the right hand side with a \texttt{?=} rathar than \texttt{=}.
+Provisional definitions are written in the same way as ordinary definitions, except that they introduce the right hand side with a \texttt{?=} rather than \texttt{=}.
 We define \texttt{parity} as follows:
 
 \begin{code}
@@ -144,7 +144,7 @@ We can complete this proof using the \texttt{trivial} tactic, which finds  \text
 The proof of the second lemma proceeds in exactly the same way.
 
 We can now test the \texttt{natToBin} function from Section~\ref{sect:nattobin} at the prompt.
-42 is 101010 in binary.
+The number 42 is 101010 in binary.
 The binary digits are reversed:
 
 \begin{lstlisting}
@@ -185,7 +185,8 @@ In this case, we assert that the value we gave was correct.
 
 Previously, we implemented conversion to binary numbers using the \texttt{Parity} view.
 Here, we show how to use the same view to implement a verified conversion to binary.
-We begin by indexing binary numbers over their \texttt{Nat} equivalent. This is a common pattern, linking a representation (in this case \texttt{Binary}) with a meaning (in this case \texttt{Nat}):
+We begin by indexing binary numbers over their \texttt{Nat} equivalent.
+This is a common pattern, linking a representation (in this case \texttt{Binary}) with a meaning (in this case \texttt{Nat}):
 
 \begin{code}
 data Binary : Nat -> Type where

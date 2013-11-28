@@ -104,7 +104,8 @@ If a method definition is missing, and there is a default definition for it, the
 
 \subsection{Extending Classes}
 
-Classes can also be extended. A logical next step from an equality relation \texttt{Eq} is to define an ordering relation \texttt{Ord}.
+Classes can also be extended.
+A logical next step from an equality relation \texttt{Eq} is to define an ordering relation \texttt{Ord}.
 We can define an \texttt{Ord} class which inherits methods from \texttt{Eq} as well as defining some of its own:
 
 \begin{code}
@@ -147,7 +148,7 @@ sortAndShow xs = show (sort xs)
 \label{sec:monad}
 
 So far, we have seen single parameter type classes, where the parameter is of type \texttt{Type}.
-In general, there can be any number (greater than 0) of parameters, and the parameters can have \remph{any} type.
+In general, there can be any number (greater than 0) of parameters, and the parameters can have \emph{any} type.
 If the type of the parameter is not \texttt{Type}, we need to give an explicit type declaration.
 For example:
 
@@ -180,7 +181,7 @@ instance Monad Maybe where
 \end{code}
 
 \noindent
-Using this we can, for example, define a function which adds two  \texttt{Maybe Int}s, using the monad to encapsulate the error handling:
+Using this we can, for example, define a function which adds two \texttt{Maybe Int}s, using the monad to encapsulate the error handling:
 
 \begin{code}
 m_add : Maybe Int -> Maybe Int -> Maybe Int
@@ -243,8 +244,7 @@ m_add x y = [ x' + y' | x' <- x, y' <- y ]
 
 \subsection{Idiom brackets}
 
-While \texttt{do} notation gives an alternative meaning to sequencing, idioms give an
-alternative meaning to \emph{application}.
+While \texttt{do} notation gives an alternative meaning to sequencing, idioms give an alternative meaning to \emph{application}.
 The notation and larger example in this section is inspired by Conor McBride and Ross Paterson's paper ``Applicative
 Programming with Effects''~\cite{idioms}.
 

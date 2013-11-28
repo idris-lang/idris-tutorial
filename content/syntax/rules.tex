@@ -1,6 +1,7 @@
 \subsection{\texttt{syntax} rules}
 
-We have seen \texttt{if...then...else} expressions, but these are not built in --- instead, we define a function in the prelude\ldots
+We have seen \texttt{if...then...else} expressions, but these are not built in.
+Instead, we can define a function in the prelude as follows:
 
 \begin{code}
 boolElim : (x:Bool) -> |(t : a) -> |(f : a) -> a; 
@@ -9,7 +10,7 @@ boolElim False t e = e;
 \end{code}
 
 \noindent
-\ldots and extend the core syntax with a \texttt{syntax} declaration:
+and then extend the core syntax with a \texttt{syntax} declaration:
 
 \begin{code}
 syntax if [test] then [t] else [e] = boolElim test t e;
@@ -52,7 +53,7 @@ data Interval : Type where
 \end{code}
 
 \noindent
-We can define a syntax which, in patterns, always matches \texttt{oh} for the proof  argument, and in terms requires a proof term to be provided:
+We can define a syntax which, in patterns, always matches \texttt{oh} for the proof argument, and in terms requires a proof term to be provided:
 
 \begin{code}
 pattern syntax "[" [x] "..." [y] "]" = MkInterval x y oh
