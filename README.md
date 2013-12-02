@@ -1,6 +1,7 @@
 # The Idris Tutorial
 
-This a copy of the main `Idris` tutorial taken from [idris-dev].
+A tutorial on working with Idris.
+More information over Idris can be found online at: [http://www.idris-lang.org]
 
 ## idrislang.sty
 
