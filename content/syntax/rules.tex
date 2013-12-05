@@ -13,7 +13,7 @@ boolElim False t e = e;
 and then extend the core syntax with a \texttt{syntax} declaration:
 
 \begin{code}
-syntax if [test] then [t] else [e] = boolElim test t e;
+syntax "if" [test] "then" [t] "else" [e] = boolElim test t e;
 \end{code}
 
 \noindent
@@ -36,10 +36,10 @@ Rules can use previously defined rules, but may not be recursive.
 The following syntax extensions would therefore be valid:
 
 \begin{code}
-syntax [var] ":=" [val]              = Assign var val;
-syntax [test] "?" [t] ":" [e]        = if test then t else e;
-syntax select [x] from [t] where [w] = SelectWhere x t w;
-syntax select [x] from [t]           = Select x t;
+syntax [var] ":=" [val]                    = Assign var val;
+syntax [test] "?" [t] ":" [e]              = if test then t else e;
+syntax "select" [x] "from" [t] "where" [w] = SelectWhere x t w;
+syntax "select" [x] "from" [t]             = Select x t;
 \end{code}
 
 \noindent
@@ -67,7 +67,7 @@ Finally, syntax rules may be used to introduce alternative binding forms.
 For example, a \texttt{for} loop binds a variable on each iteration:
 
 \begin{code}
-syntax for {x} "in" [xs] ":" [body] = forLoop xs (\x => body)
+syntax "for" {x} "in" [xs] ":" [body] = forLoop xs (\x => body)
   
 main : IO ()
 main = do for x in [1..10]:
