@@ -197,7 +197,18 @@ Interactive editing is achieved using the following editor commands, each of whi
 \end{itemize}
 
 \noindent
+There are also commands to invoke the type checker and evaluator:
+
+\begin{itemize}
+\item\verb!\t! displays the type of the (globally visible) name under the cursor.
+In the case of a metavariable, this displays the context and the expected type.
+\item\verb!\e! prompts for an expression to evaluate.
+\item\verb!\r! reloads and type checks the buffer.
+\end{itemize}
+
+\noindent
 Corresponding commands are also available in the Emacs mode.
-Support for other editors can be added in a relatively straighforward manner by using \verb!idris --client!.
+Support for other editors can be added in a relatively straighforward manner by using
+\texttt{idris --client}.
 
 
