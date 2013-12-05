@@ -28,7 +28,7 @@ That is, each command acts on a specific source line, at a specific name, and ou
 When the REPL is loaded, it also starts a background process which accepts and responds to REPL commands, using \verb!idris --client!.
 For example, if we have a REPL running elsewhere, we can execute commands such as:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 $ idris --client ':t plus'
 Prelude.Nat.plus : Nat -> Nat -> Nat
 $ idris --client '2+2'

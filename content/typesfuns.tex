@@ -20,7 +20,7 @@ A library module \texttt{prelude} is automatically imported by every \Idris{} pr
 The prelude defines several arithmetic and comparison operators, which we can use at the prompt. Evaluating things at the prompt gives an answer, and the type of the answer.
 For example:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 *prims> 6*6+6
 42 : Int
 *prims> x == 6*6+6
@@ -32,7 +32,7 @@ All of the usual arithmetic and comparison operators are defined for the primiti
 They are overloaded using type classes, as we will discuss in Section~\ref{sec:classes} and can be extended to work on user defined types.
 Boolean expressions can be tested with the \texttt{if...then...else} construct:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 *prims> if x == 6 * 6 + 6 then "The answer!" else "Not the answer"
 "The answer!" : String
 \end{lstlisting}
@@ -64,7 +64,7 @@ Functions, data constructors and type constructors may all be given infix operat
 They may be used in prefix form if enclosed in brackets, e.g.\ \tDC{(::)}.
 Infix operators can use any of the symbols:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 :+-*/=_.?|&><!@$%^~.
 \end{lstlisting}
 
@@ -93,7 +93,7 @@ Function names (\tFN{plus} and \tFN{mult} above), data constructors (\tDC{Z}, \t
 
 We can test these functions at the \Idris{} prompt:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 Idris> plus (S (S Z)) (S (S Z))
 S (S (S (S Z))) : Nat
 Idris> mult (S (S (S Z))) (plus (S (S Z)) (S (S Z)))
@@ -103,7 +103,7 @@ S (S (S (S (S (S (S (S (S (S (S (S Z))))))))))) : Nat
 \noindent
 Like arithmetic operations, integer literals are also overloaded using type classes, meaning that we can also test the functions as follows:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 Idris> plus 2 2 
 S (S (S (S Z))) : Nat
 Idris> mult 3 (plus 2 2)
@@ -221,7 +221,7 @@ For example:
 \noindent
 Which when run through the \Idris{} type checker results in the following:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 $ idris vbroken.idr --check
 vbroken.idr:3:6:When elaborating right hand side of vapp:
 Can't unify
@@ -498,20 +498,21 @@ map f (x :: xs) = f x :: map f xs
 
 
 \noindent
-For example, to double every element in a vector of integers:
+For example, given the following vector of integers, and a function to double an integer:
 
-\inputIdrisListing[firstline=2,lastline=7]{./examples/usefultypes.idr}
+\inputIdrisListing[firstline=2,lastline=6]{./examples/usefultypes.idr}
 
 \noindent
-You'll find these examples in \texttt{usefultypes.idr} in the \texttt{examples/} directory:
+the function \texttt{map} can be used as follows to double every element in the vector:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 *usefultypes> show (map double intVec) 
 "[2, 4, 6, 8, 10]" : String
 \end{lstlisting}
 
-
 \noindent
+You'll find these examples in \texttt{usefultypes.idr} in the \texttt{examples/} directory:
+
 For more details of the functions available on \texttt{List} and \texttt{Vect}, look in the library, in \texttt{libs/prelude/Pre\-lude/List.idr} and \texttt{libs/prelude/Prelude/Vect.idr} respectively.
 Functions include filtering, appending, reversing, and so on.
 Also remember that \Idris{} is still in development, so if you don't see the function you need, please feel free to add it and submit a patch!
@@ -521,7 +522,7 @@ Also remember that \Idris{} is still in development, so if you don't see the fun
 There are actually neater ways to write the above expression.
 One way would be to use an anonymous function:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 *usefultypes> show (map (\x => x * 2) intVec)
 "[2, 4, 6, 8, 10]" : String
 \end{lstlisting}
@@ -533,7 +534,7 @@ Anonymous functions may take several arguments, separated by commas, e.g.\ \lsti
 Arguments may also be given explicit types, e.g.\ \lstinline!\x : Int => x * 2!, and can pattern match, e.g.\ \lstinline!\(x, y) => x + y!.
 We could also use an operator section:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *usefultypes> show (map (* 2) intVec)
 "[2, 4, 6, 8, 10]" : String
 \end{lstlisting}
@@ -705,7 +706,7 @@ For example, we can extract fields from a record as follows, as well as by patte
 \Idris{} provides \emph{comprehension} notation as a convenient shorthand for building lists.
 The general form is:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 [ expression | qualifiers ]
 \end{lstlisting}
  
@@ -748,7 +749,7 @@ We can use this to write \texttt{lookup\_default}, which looks up an index and r
 \noindent
 If the index is in bounds, we get the value at that index, otherwise we get a default value:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *usefultypes> lookup_default 2 [3,4,5,6] (-1)
 5 : Integer
 *usefultypes> lookup_default 4 [3,4,5,6] (-1)
@@ -785,7 +786,7 @@ fred = MkPerson "Fred" 30
 Record declarations are like \texttt{data} declarations, except that they are  introduced by the \texttt{record} keyword, and can only have one constructor.
 The names of the binders in the constructor type (\texttt{name} and \texttt{age}) here are the field names, which we can use to access the field values:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 *record> name fred
 "Fred" : String
 *record> age fred
@@ -797,7 +798,7 @@ name : Person -> String
 \noindent
 We can also use the field names to update a record (or, more precisely, produce a new record with the given fields updates).
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *record> record { name = "Jim" } fred
 MkPerson "Jim" 30 : Person
 *record> record { name = "Jim", age = 20 } fred
@@ -826,7 +827,7 @@ addStudent : Person -> Class -> Class
 addStudent p c = record { students = p :: students c } c
 \end{code}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *record> addStudent fred (ClassInfo [] "CS")
 ClassInfo (prelude.vect.:: (MkPerson "Fred" 30) (prelude.vect.Nil)) "CS" 
   : Class

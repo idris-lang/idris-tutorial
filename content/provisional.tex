@@ -1,5 +1,4 @@
 \section{Provisional Definitions}
-
 \label{sect:provisional}
 
 Sometimes when programming with dependent types, the type required by the type checker and the type of the program we have written will be different (in that they do not have the same normal form), but nevertheless provably equal.
@@ -67,7 +66,7 @@ parity (S (S k)) with (parity k)
 When written in this form, instead of reporting a type error, \Idris{} will insert a metavariable standing for a theorem which will correct the type error.
 \Idris{} tells us we have two proof obligations, with names generated from the module and function names:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *views> :m 
 Global metavariables:
         [views.parity_lemma_2,views.parity_lemma_1]
@@ -76,7 +75,7 @@ Global metavariables:
 \noindent
 The first of these has the following type:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *views> :p views.parity_lemma_1 
 
 ---------------------------------- (views.parity_lemma_1) --------
@@ -98,7 +97,7 @@ plusSuccRightSucc : (left : Nat) -> (right : Nat) ->
 \noindent
 After applying \texttt{intro} twice, we have:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -views.parity_lemma_1> intro 
 
   j : Nat
@@ -110,7 +109,7 @@ After applying \texttt{intro} twice, we have:
 \noindent
 We need to use \texttt{compute} again to unfold the definition of \texttt{(+)}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -views.parity_lemma_1> intro 
 
   j : Nat
@@ -122,7 +121,7 @@ We need to use \texttt{compute} again to unfold the definition of \texttt{(+)}.
 \noindent
 Then we apply the \texttt{plusSuccRightSucc} rewrite rule, symmetrically, to \texttt{j} and \texttt{j}, giving:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -views.parity_lemma_1> rewrite sym (plusSuccRightSucc j j) 
  
   j : Nat
@@ -134,7 +133,7 @@ Then we apply the \texttt{plusSuccRightSucc} rewrite rule, symmetrically, to \te
 \noindent
 \texttt{sym} is a function, defined in the library, which reverses the order of the rewrite:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 sym : l = r -> r = l
 sym refl = refl
 \end{lstlisting} 
@@ -147,7 +146,7 @@ We can now test the \texttt{natToBin} function from Section~\ref{sect:nattobin} 
 The number 42 is 101010 in binary.
 The binary digits are reversed:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *views> show (natToBin 42)
 "[False, True, False, True, False, True]" : String
 \end{lstlisting}
@@ -169,7 +168,7 @@ believe_me : a -> b
 Obviously, this should be used with extreme caution.
 It is useful when prototyping, and can also be appropriate when asserting properties of external code (perhaps in an external C library). The ``proof'' of \texttt{views.parity\_lemma\_1} using this is:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 views.parity_lemma_2 = proof {
     intro;
     intro;
