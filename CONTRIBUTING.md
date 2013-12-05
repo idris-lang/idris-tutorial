@@ -10,21 +10,10 @@
 
 ## Grammar and Spelling
 
-* Before submitting try and run your contribution through: [Style-Check.rb](http://www.cs.umd.edu/~nspring/software/style-check-readme.html). Style-Check.rb is a simple tool to check for _bad phrases_, and nominal _bad LaTeX_. The output is given in compiler format. 
+* Before submitting try and run your contribution through: [Style-Check.rb](http://www.cs.umd.edu/~nspring/software/style-check-readme.html).
+  Style-Check.rb is a simple tool to check for _bad phrases_, and nominal _bad LaTeX_.
+  The output is given in compiler format. 
 * Version of English used...this has yet to be decided upon.
-
-## Dev Process
-
-For developing the tutorial, we aim to follow the following [Git Branching Model](http://nvie.com/posts/a-successful-git-branching-model).
-In this model there are two main branches:
-
-* **master** Reflects the _current_ version of the tutorial inline with the _current_ version of Idris on Hackage.
-* **dev** Reflects the latest upstream and current state of the tutorial.
-
-All pull requests that are for new additions to the project should go to **dev**
-All pull requests that detail fixes to the tutorial that is: grammar, spelling, and coding mistakes should be submitted to **master**
-
-This might sound complicated but in the long term it makes sense in terms of release management.
 
 ## idrislang.sty
 
