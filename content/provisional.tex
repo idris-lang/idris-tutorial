@@ -4,35 +4,31 @@
 Sometimes when programming with dependent types, the type required by the type checker and the type of the program we have written will be different (in that they do not have the same normal form), but nevertheless provably equal.
 For example, recall the \texttt{parity} function:
 
-\begin{code}
-data Parity : Nat -> Type where
-   even : Parity (n + n)
-   odd  : Parity (S (n + n))
-
-parity : (n:Nat) -> Parity n
-\end{code}
+\inputIdrisListing[lastline=6]{./examples/viewsbroken.idr}
 
 \noindent
 We'd like to implement this as follows:
 
-\begin{code}
-parity : (n:Nat) -> Parity n
-parity Z     = even {n=Z}
-parity (S Z) = odd {n=Z}
-parity (S (S k)) with (parity k)
-  parity (S (S (j + j)))     | even = even {n=S j}
-  parity (S (S (S (j + j)))) | odd  = odd {n=S j}
-\end{code}
+\inputIdrisListing[firstline=6]{./examples/viewsbroken.idr}
 
 \noindent
 This simply states that zero is even, one is odd, and recursively, the parity of \texttt{k+2} is the same as the parity of \texttt{k}. 
 Explicitly marking the value of \texttt{n} is even and odd is necessary to help type inference.
 Unfortunately, the type checker rejects this:
 
-\begin{code}
-views.idr:12:Can't unify Parity (plus (S j) (S j)) with 
-Parity (S (S (plus j j)))
-\end{code}
+\begin{lstlisting}[style=stdout]
+viewsbroken.idr:12:10:When elaborating right hand side of ViewsBroken.parity:
+Can't unify
+	Parity (plus (S j) (S j))
+with
+	Parity (S (S (plus j j)))
+
+Specifically:
+	Can't unify
+		plus (S j) (S j)
+	with
+		S (S (plus j j))
+\end{lstlisting}
 
 \noindent
 The type checker is telling us that \texttt{(j+1)+(j+1)} and \texttt{2+j+j} do not normalise to the same value.
@@ -53,14 +49,7 @@ There are two main reasons why they are useful.
 Provisional definitions are written in the same way as ordinary definitions, except that they introduce the right hand side with a \texttt{?=} rather than \texttt{=}.
 We define \texttt{parity} as follows:
 
-\begin{code}
-parity : (n:Nat) -> Parity n
-parity Z     = even {n=Z}
-parity (S Z) = odd {n=Z}
-parity (S (S k)) with (parity k)
-  parity (S (S (j + j)))     | even ?= even {n=S j}
-  parity (S (S (S (j + j)))) | odd  ?= odd {n=S j}
-\end{code}
+\inputIdrisListing[firstline=7, lastline=12]{./examples/views.idr}
 
 \noindent
 When written in this form, instead of reporting a type error, \Idris{} will insert a metavariable standing for a theorem which will correct the type error.

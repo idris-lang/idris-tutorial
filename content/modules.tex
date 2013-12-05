@@ -78,17 +78,7 @@ Defining a module also defines a namespace implicitly.
 However, namespaces can also be given \emph{explicitly}.
 This is most useful if you wish to overload names within the same module:
 
-\begin{code}
-module foo
-
-namespace x
-  test : Int -> Int
-  test x = x * 2
-
-namespace y
-  test : String -> String
-  test x = x ++ x 
-\end{code}
+\inputIdrisListing{./examples/foo.idr}
 
 \noindent
 This (admittedly contrived) module defines two functions with fully qualified names

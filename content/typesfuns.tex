@@ -162,19 +162,7 @@ However, the type declaration for a function \texttt{f} \emph{can} be omitted if
 \noindent
 So, for example, the following definitions are legal:
 
-\begin{code}
-even : Nat -> Bool 
-even Z = True
-even (S k) = odd k where 
-  odd Z = False
-  odd (S k) = even k 
-
-test : List Nat
-test = [c (S 1), c Z, d (S Z)]
-  where c x = 42 + x
-        d y = c (y + 1 + z y)
-              where z w = y + w
-\end{code}
+\inputIdrisListing[firstline=3]{./examples/wheres.idr}
 
 \subsection{Dependent Types}
 
