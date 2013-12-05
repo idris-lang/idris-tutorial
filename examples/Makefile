@@ -4,5 +4,8 @@ check: .PHONY
 	echo "Checking $$x"; \
 	idris --check $$x; \
 	done
-	
+
+clean:
+	rm -f *.ibc
+
 .PHONY:
