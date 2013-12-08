@@ -116,7 +116,7 @@ plusReducesZ' (S k) = let ih = plusReducesZ' k in
 \end{code}
 
 \noindent
-On running \Idris{}, two global names are created, \texttt{plusredZ\_O} and \texttt{plusredZ\_S}, with no definition.
+On running \Idris{}, two global names are created, \texttt{plusredZ\_Z} and \texttt{plusredZ\_S}, with no definition.
 We can use the \texttt{:m} command at the prompt to find out which metavariables are still to be solved (or, more precisely, which functions exist but have no definitions), then the \texttt{:t} command to see their types:
 
 \begin{lstlisting}[style=stdout]
