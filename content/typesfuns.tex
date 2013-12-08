@@ -321,7 +321,8 @@ We can construct such a predicate if the required element is \texttt{here}, at t
 For example:
 
 \begin{code}
-testVec : Vect 4 Int testVec = 3 :: 4 :: 5 :: 6 :: Nil
+testVec : Vect 4 Int
+testVec = 3 :: 4 :: 5 :: 6 :: Nil
 
 inVect : Elem 5 testVec
 inVect = there (there here)
