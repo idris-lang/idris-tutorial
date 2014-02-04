@@ -44,7 +44,7 @@ Int -> String -> IO () : Type
 
 \noindent
 We build a call to a foreign function by giving the name of the function, a list of argument types and the return type.
-The built in function \texttt{mkForeign} converts this description to a function callable by \Idris{}:
+The built in construct \texttt{mkForeign} converts this description to a function callable by \Idris{}:
 
 \begin{code}
 data Foreign : Type -> Type where
@@ -55,6 +55,8 @@ mkForeign : Foreign x -> x
 \end{code}
 
 \noindent
+Note that the compiler expects \texttt{mkForeign} to be fully applied to
+build a complete foreign function call.
 For example, the \texttt{putStr} function is implemented as follows, as a call to  an external function \texttt{putStr} defined in the run-time system:
 
 \begin{code}

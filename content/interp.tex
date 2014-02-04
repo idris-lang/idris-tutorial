@@ -262,33 +262,33 @@ It is a \emph{multi-parameter} type class, defining the source type and object t
 It must be possible for the type checker to infer \emph{both} parameters at the point where the cast is applied.
 There are casts defined between all of the primitive types, as far as they make sense.
 
-\subsection{Unit testing}
+%\subsection{Unit testing}
 
-Recall the \texttt{so} data type:
+%Recall the \texttt{so} data type:
 
-\begin{code}
-data so : Bool -> Type where
-  oh : so True
-\end{code}
+%\begin{code}
+%data so : Bool -> Type where
+%  oh : so True
+%\end{code}
 
-\noindent
-This requires its parameter to be a \texttt{True} value.
-One simple application of this is to perform unit testing of functions at compile time.
-For example, we know that  \texttt{4! = 24} so we can set up a test case as follows:
+%\noindent
+%This requires its parameter to be a \texttt{True} value.
+%One simple application of this is to perform unit testing of functions at compile time.
+%For example, we know that  \texttt{4! = 24} so we can set up a test case as follows:
 
-\begin{code}
-unitTestFac : so (interp [] fact 4 == 24)
-unitTestFac = oh
-\end{code} 
+%\begin{code}
+%unitTestFac : so (interp [] fact 4 == 24)
+%unitTestFac = oh
+%\end{code} 
 
-\noindent
-For the program to compile, the test case must pass. If we change \texttt{24} to \texttt{25}, say, we will get an error message like the following:
+%\noindent
+%For the program to compile, the test case must pass. If we change \texttt{24} to \texttt{25}, say, we will get an error message like the following:
 
-\begin{lstlisting}
-Type checking ./interp.idr
-interp.idr:64:Can't unify so True with so False
+%\begin{lstlisting}
+%Type checking ./interp.idr
+%interp.idr:64:Can't unify so True with so False
 
-Specifically:
-	 Can't unify True with False
-\end{lstlisting} 
+%Specifically:
+%	 Can't unify True with False
+%\end{lstlisting} 
 

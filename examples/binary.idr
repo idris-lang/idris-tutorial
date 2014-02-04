@@ -38,18 +38,18 @@ main = do putStr "Enter a number: "
 
 ---------- Proofs ----------
 
-parity_lemma_1 = proof {
-    intros;
-    rewrite sym (plusSuccRightSucc j j);
-    trivial;
-}
+Main.natToBin_lemma_1 = proof
+  intros
+  rewrite plusSuccRightSucc j j
+  rewrite sym (plusSuccRightSucc j j)
+  trivial
 
-natToBin_lemma_1 = proof {
-    intro;
-    intro;
-    rewrite sym (plusSuccRightSucc j j);
-    trivial;
-}
+
+parity_lemma_1 = proof
+    intros
+    rewrite sym (plusSuccRightSucc j j)
+    trivial
+
 
 parity_lemma_2 = proof {
     intro;
@@ -57,6 +57,5 @@ parity_lemma_2 = proof {
     rewrite sym (plusSuccRightSucc j j);
     trivial;
 }
-
 
 
