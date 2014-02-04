@@ -40,7 +40,7 @@ data Expr : Vect n Ty -> Ty -> Type
 Since expressions are indexed by their type, we can read the typing rules of the language from the definitions of the constructors.
 Let us look at each constructor in turn.
 
-\begin{code}[caption={Expression representation},label=exprty]
+\begin{code}[caption={Expression representation},label=exprty, float=htp]
 data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
     stop : HasType fZ (t :: G) t
     pop  : HasType k G t -> HasType (fS k) (u :: G) t
@@ -50,8 +50,8 @@ data Expr : Vect n Ty -> Ty -> Type where
     Val : (x : Int) -> Expr G TyInt
     Lam : Expr (a :: G) t -> Expr G (TyFun a t)
     App : Expr G (TyFun a t) -> Expr G a -> Expr G t
-    Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a -> Expr G b -> 
-          Expr G c
+    Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a ->
+          Expr G b -> Expr G c
     If  : Expr G TyBool -> Expr G a -> Expr G a -> Expr G a
 \end{code}
 
@@ -233,7 +233,7 @@ Here, \texttt{cast} is an overloaded function which converts a value from one ty
 Here, it converts a string to an integer, giving 0 if the input is invalid.
 An example run of this program at the \Idris{} interactive environment is shown in Listing~\ref{factrun}.
 
-\begin{lstlisting}[caption={Running the well-typed interpreter}, label=factrun, escapechar=^]
+\begin{lstlisting}[caption={Running the well-typed interpreter}, label=factrun, style=stdout]
 $ idris interp.idr  
      ____    __     _                                          
     /  _/___/ /____(_)____                                     

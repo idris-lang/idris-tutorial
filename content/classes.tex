@@ -33,7 +33,7 @@ instance Show Nat where
     show (S k) = "s" ++ show k
 \end{code}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 Idris> show (S (S (S Z)))
 "sssZ" : String
 \end{lstlisting}
@@ -194,7 +194,7 @@ m_add x y = do x' <- x -- Extract value from x
 This function will extract the values from \texttt{x} and \texttt{y}, if they are available, or return \texttt{Nothing} if they are not.
 Managing the \texttt{Nothing} cases is achieved by the \texttt{>>=} operator, hidden by the \texttt{do} notation.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *classes> m_add (Just 20) (Just 22) 
 Just 42 : Maybe Int
 *classes> m_add (Just 20) Nothing 
@@ -324,7 +324,9 @@ fetch : String -> Eval Int
 fetch x = MkEval (\e => fetchVal e) where
     fetchVal : List (String, Int) -> Maybe Int
     fetchVal [] = Nothing
-    fetchVal ((v, val) :: xs) = if (x == v) then (Just val) else (fetchVal xs)
+    fetchVal ((v, val) :: xs) = if (x == v)
+                                  then (Just val)
+                                  else (fetchVal xs)
 \end{code} 
   
 \noindent
@@ -385,7 +387,7 @@ testList = [3,4,1]
 \noindent
 \ldots we can sort it using the default \texttt{Ord} instance, then the named instance \texttt{myord} as follows, at the \Idris{} prompt:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *named_instance> show (sort testList)
 "[sO, sssO, ssssO]" : String
 *named_instance> show (sort @{myord} testList)

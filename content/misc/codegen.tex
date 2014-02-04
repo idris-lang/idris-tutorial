@@ -9,7 +9,7 @@ One can use the FFI to communicate with the \emph{JavaScript} ecosystem.
 Code generation is split into two separate targets.
 To generate code that is tailored for running in the browser issue the following command:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 $ idris --codegen javascript hello.idr -o hello.js
 \end{lstlisting}
 
@@ -20,7 +20,7 @@ The resulting file can be embedded into your HTML just like any other \emph{Java
 Generating code for \emph{NodeJS} is slightly different.
 \Idris{} outputs a \emph{JavaScript} file that can be directly executed via \texttt{node}.
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 $ idris --codegen node hello.idr -o hello
 $ ./hello
 Hello world
@@ -102,3 +102,4 @@ The program outputs \texttt{3}, just like we expected.
 However, the generated code can be minified using the \texttt{closure-compiler} from Google.
 Any other minifier is also suitable but \texttt{closure-compiler} offers advanced compilation that does some aggressive inlining and code elimination.
 \Idris{} can take full advantage of this compilation mode and it's highly recommended to use it when shipping a \emph{JavaScript} application written in \Idris{}.
+

@@ -3,7 +3,7 @@
 Since values can appear in types and \emph{vice versa}, it is natural that types themselves have types.
 For example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *universe> :t Nat
 Nat : Type
 *universe> :t Vect
@@ -13,7 +13,7 @@ Vect : Nat -> Type -> Type
 \noindent
 But what about the type of \texttt{Type}? If we ask \Idris{} it reports
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *universe> :t Type
 Type : Type 1
 \end{lstlisting} 

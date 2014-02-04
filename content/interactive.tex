@@ -1,48 +1,34 @@
 \section{Interactive Editing}
 
-By now, we have seen several examples of how \Idris{}' dependent type system
-can give extra confidence in a function's correctness by giving a more
-precise description of its intended behaviour in its \emph{type}. We have also
-seen an example of how the type system can help with EDSL development by
-allowing a programmer to describe the type system of an object language.
-However, precise types give us more than verification of programs --- we
-can also exploit types to help write programs which are
-\emph{correct by construction}.
+By now, we have seen several examples of how \Idris{}' dependent type system can give extra confidence in a function's correctness by giving a more precise description of its intended behaviour in its \emph{type}.
+We have also seen an example of how the type system can help with EDSL development by allowing a programmer to describe the type system of an object language.
+However, precise types give us more than verification of programs --- we can also exploit types to help write programs which are \emph{correct by construction}.
 
-The \Idris{} REPL provides several commands for inspecting and modifying
-parts of programs, based on their types, such as case splitting on a pattern
-variable, inspecting the type of a metavariable, and even a basic proof
-search mechanism. In this section, we explain how these features can be
-exploited by a text editor, and specifically how to do so in 
-Vim\footnote{https://github.com/idris-hackers/idris-vim}. 
+The \Idris{} REPL provides several commands for inspecting and modifying parts of programs, based on their types, such as case splitting on a pattern variable, inspecting the type of a metavariable, and even a basic proof search mechanism.
+In this section, we explain how these features can be exploited by a text editor, and specifically how to do so in Vim\footnote{\url{https://github.com/idris-hackers/idris-vim}}. 
 An interactive mode for
-Emacs\footnote{https://github.com/idris-hackers/idris-emacs} is also available.
+Emacs\footnote{\url{https://github.com/idris-hackers/idris-emacs}} is also available.
 
 \subsection{Editing at the REPL}
 
-The REPL provides a number of commands, which we will describe shortly,
-which generate new program fragments
-based on the currently loaded module. These take the general form
+The REPL provides a number of commands, which we will describe shortly, which generate new program fragments based on the currently loaded module. These take the general form
 
 \begin{code}
 :command [line number] [name]
 \end{code}
 
 \noindent
-That is, each command acts on a specific source line, at a specific name, and
-outputs a new program fragment. Each command has an alternative form,
-which \emph{updates} the source file in-place:
+That is, each command acts on a specific source line, at a specific name, and outputs a new program fragment. Each command has an alternative form, which \emph{updates} the source file in-place:
 
 \begin{code}
 :command! [line number] [name]
 \end{code}
 
 \noindent
-When the REPL is loaded, it also starts a background process which accepts
-and responds to REPL commands, using \texttt{idris --client}. For example,
-if we have a REPL running elsewhere, we can execute commands such as:
+When the REPL is loaded, it also starts a background process which accepts and responds to REPL commands, using \verb!idris --client!.
+For example, if we have a REPL running elsewhere, we can execute commands such as:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 $ idris --client ':t plus'
 Prelude.Nat.plus : Nat -> Nat -> Nat
 $ idris --client '2+2'
@@ -50,50 +36,42 @@ $ idris --client '2+2'
 \end{lstlisting}
 
 \noindent
-A text editor can take advantage of this, along with the editing commands,
-in order to provide interactive editing support.
+A text editor can take advantage of this, along with the editing commands, in order to provide interactive editing support.
 
 \subsection{Editing Commands}
 
 \subsubsection{:addclause}
 
-The \texttt{:addclause n f} command (abbreviated \texttt{:ac n f}) creates a
-template definition for the function named \texttt{f} declared on line
-\texttt{n}.
-
-For example, if the code beginning on line 94 contains\ldots
+The \texttt{:addclause n f} command (abbreviated \texttt{:ac n f}) creates a template definition for the function named \texttt{f} declared on line \texttt{n}.
+For example, if the code beginning on line 94 contains:
 
 \begin{code}
 vzipWith : (a -> b -> c) -> 
            Vect n a -> Vect n b -> Vect n c
 \end{code}
 
-\ldots then \texttt{:ac 94 vzipWith} will give:
+\noindent
+then \texttt{:ac 94 vzipWith} will give:
 
 \begin{code}
 vzipWith f xs ys = ?vzipWith_rhs
 \end{code}
 
 \noindent
-The names are chosen according to hints which may be given by a programmer,
-and then made unique by the machine by adding a digit if necessary. Hints
-can be given as follows:
+The names are chosen according to hints which may be given by a programmer, and then made unique by the machine by adding a digit if necessary.
+Hints can be given as follows:
 
 \begin{code}
 %name Vect xs, ys, zs, ws
 \end{code}
 
 \noindent
-This declares that any names generated for types in the \texttt{Vect} family
-should be chosen in the order \texttt{xs}, \texttt{ys}, \texttt{zs},
-\texttt{ws}.
+This declares that any names generated for types in the \texttt{Vect} family should be chosen in the order \texttt{xs}, \texttt{ys}, \texttt{zs}, \texttt{ws}.
 
 \subsubsection{:casesplit}
 
-The \texttt{:casesplit n x} command, abbreviated \texttt{:cs n x}, splits
-the pattern variable \texttt{x} on line \texttt{n} into the various pattern
-forms it may take, removing any cases which are impossible due to unification
-errors. For example, if the code beginning on line 94 is\ldots
+The \texttt{:casesplit n x} command, abbreviated \texttt{:cs n x}, splits the pattern variable \texttt{x} on line \texttt{n} into the various pattern forms it may take, removing any cases which are impossible due to unification errors.
+For example, if the code beginning on line 94 is:
 
 \begin{code}
 vzipWith : (a -> b -> c) -> 
@@ -101,33 +79,28 @@ vzipWith : (a -> b -> c) ->
 vzipWith f xs ys = ?vzipWith_rhs
 \end{code}
 
-\ldots then \texttt{:cs 96 xs} will give:
+\noindent
+then \texttt{:cs 96 xs} will give:
 
 \begin{code}
 vzipWith f [] ys = ?vzipWith_rhs_1
 vzipWith f (x :: xs) ys = ?vzipWith_rhs_2
 \end{code}
 
-\noindent That is, the pattern variable \texttt{xs} has been split into the
-two possible cases \texttt{[]} and \texttt{x :: xs}. Again, the names are
-chosen according to the same heuristic. 
-%
-If we update the file (using \texttt{:cs!}) then case split on \texttt{ys}
-on the same line, we get:
+\noindent
+That is, the pattern variable \texttt{xs} has been split into the two possible cases \texttt{[]} and \texttt{x :: xs}. Again, the names are chosen according to the same heuristic.
+If we update the file (using \texttt{:cs!}) then case split on \texttt{ys} on the same line, we get:
 
 \begin{code}
 vzipWith f [] [] = ?vzipWith_rhs_3
 \end{code}
 
-\noindent That is, the pattern variable \texttt{ys} has been split into
-one case \texttt{[]}, \Idris{} having noticed that the other possible case
-\texttt{y :: ys} would lead to a unification error.
+\noindent 
+That is, the pattern variable \texttt{ys} has been split into one case \texttt{[]}, \Idris{} having noticed that the other possible case \texttt{y :: ys} would lead to a unification error.
 
 \subsubsection{:addmissing}
 
-The \texttt{:addmissing n f} command, abbreviated \texttt{:am n f}, adds
-the clauses which are required to make the function \texttt{f} on line
-\texttt{n} cover all inputs. 
+The \texttt{:addmissing n f} command, abbreviated \texttt{:am n f}, adds the clauses which are required to make the function \texttt{f} on line \texttt{n} cover all inputs. 
 For example, if the code beginning on line 94 is\ldots
 
 \begin{code}
@@ -136,27 +109,22 @@ vzipWith : (a -> b -> c) ->
 vzipWith f [] [] = ?vzipWith_rhs_1
 \end{code}
 
-\ldots then \texttt{:am 96 vzipWith} gives:
+\noindent
+then \texttt{:am 96 vzipWith} gives:
 
 \begin{code}
 vzipWith f (x :: xs) (y :: ys) = ?vzipWith_rhs_2
 \end{code}
 
 \noindent
-That is, it notices that there are no cases for non-empty vectors, generates
-the required clauses, and eliminates the clauses which would lead to
-unification errors.
+That is, it notices that there are no cases for non-empty vectors, generates the required clauses, and eliminates the clauses which would lead to unification errors.
 
 \subsubsection{:proofsearch}
 
-The \texttt{:proofsearch n f} command, abbreviated \texttt{:ps n f},
-attempts to find a value for the metavariable \texttt{f} on line \texttt{n}
-by proof search, trying values of local variables, recursive calls
-and constructors of the required family.
-Optionally, it can take a list of \emph{hints}, which are functions it can
-try applying to solve the metavariable.
+The \texttt{:proofsearch n f} command, abbreviated \texttt{:ps n f}, attempts to find a value for the metavariable \texttt{f} on line \texttt{n} by proof search, trying values of local variables, recursive calls and constructors of the required family.
+Optionally, it can take a list of \emph{hints}, which are functions it can try applying to solve the metavariable.
 %
-For example, if the code beginning on line 94 is\ldots
+For example, if the code beginning on line 94 is:
 
 \begin{code}
 vzipWith : (a -> b -> c) -> 
@@ -165,40 +133,37 @@ vzipWith f [] [] = ?vzipWith_rhs_1
 vzipWith f (x :: xs) (y :: ys) = ?vzipWith_rhs_2
 \end{code}
 
-\ldots then \texttt{:ps 96 vzipWith\_rhs\_1} will give
+\noindent
+then \texttt{:ps 96 vzipWith\_rhs\_1} will give
 
 \begin{code}
 []
 \end{code}
 
 \noindent
-This works because it is searching for a \texttt{Vect} of length 0, of which
-the empty vector is the only possibiliy. Similarly, and perhaps 
-surprisingly, there is only one
-possibility if we try to solve \texttt{:ps 97 vzipWith\_rhs\_2}:
+This works because it is searching for a \texttt{Vect} of length 0, of which the empty vector is the only possibiliy.
+Similarly, and perhaps surprisingly, there is only one possibility if we try to solve \texttt{:ps 97 vzipWith\_rhs\_2}:
 
 \begin{code}
 f x y :: (vzipWith f xs ys)
 \end{code}
 
 \noindent
-This works because \texttt{vzipWith} has a precise enough type: The resulting
-vector has to be non-empty (a \texttt{::}); the first element must have
-type \texttt{c} and the only way to get this is to apply \texttt{f} to
-\texttt{x} and \texttt{y}; finally, the tail of the vector can only be
-built recursively.
+This works because \texttt{vzipWith} has a precise enough type:
+The resulting vector has to be non-empty (a \texttt{::}); the first element must have type \texttt{c} and the only way to get this is to apply \texttt{f} to \texttt{x} and \texttt{y}; finally, the tail of the vector can only be built recursively.
 
 \subsubsection{:makewith}
 
-The \texttt{:makewith n f} command, abbreviated \texttt{:mw n f}, adds a
-\texttt{with} to a pattern clause. For example, recall \texttt{parity}.
-If line 10 is\ldots
+The \texttt{:makewith n f} command, abbreviated \texttt{:mw n f}, adds a \texttt{with} to a pattern clause.
+For example, recall \texttt{parity}.
+If line 10 is:
 
 \begin{code}
 parity (S k) = ?parity_rhs
 \end{code}
 
-\ldots then \texttt{:mw 10 parity} will give:
+\noindent
+then \texttt{:mw 10 parity} will give:
 
 \begin{code}
 parity (S k) with (_)
@@ -206,9 +171,7 @@ parity (S k) with (_)
 \end{code}
 
 \noindent
-If we then fill in the placeholder \texttt{\_} with \texttt{parity k} and
-case split on \texttt{with\_pat} using \texttt{:cs 11 with\_pat} we get
-the following patterns:
+If we then fill in the placeholder \verb!_! with \verb!parity k! and case split on \verb!with_pat! using \verb!:cs 11 with_pat! we get the following patterns:
 
 \begin{code}
   parity (S (plus n n)) | even = ?parity_rhs_1
@@ -216,49 +179,36 @@ the following patterns:
 \end{code}
 
 \noindent
-Note that case splitting has normalised the patterns here (giving
-\texttt{plus} rather than \texttt{+}). In any case,
-we see that using interactive editing significantly simplifies the
-implementation of dependent pattern matching by showing a programmer exactly
-what the valid patterns are.
+Note that case splitting has normalised the patterns here (giving \texttt{plus} rather than \texttt{+}).
+In any case, we see that using interactive editing significantly simplifies the implementation of dependent pattern matching by showing a programmer exactly what the valid patterns are.
 
 \subsection{Interactive Editing in Vim}
 
-The editor mode for Vim provides syntax highlighting, indentation and
-interactive editing support using the commands described above. Interactive
-editing is achieved using the following editor commands, each of which
-update the buffer directly:
+The editor mode for Vim provides syntax highlighting, indentation and interactive editing support using the commands described above.
+Interactive editing is achieved using the following editor commands, each of which update the buffer directly:
 
 \begin{itemize}
-\item \texttt{$\backslash$d} adds a template definition for the name declared
-on the current line (using \texttt{:addclause}).
-\item \texttt{$\backslash$c} case splits the variable at the cursor
-(using \texttt{:casesplit}).
-\item \texttt{$\backslash$m} adds the missing cases for the name at the
-cursor (using \texttt{:addmissing}.
-\item \texttt{$\backslash$w} adds a \texttt{with} clause (using
-\texttt{:makewith}). 
-\item \texttt{$\backslash$o} invokes a proof search to solve the metavariable
-under the cursor (using \texttt{:proofsearch}).
-\item \texttt{$\backslash$p} invokes a proof search with additional hints
-to solve the metavariable
-under the cursor (using \texttt{:proofsearch}).
+\item \verb!\d! adds a template definition for the name declared on the current line (using \texttt{:addclause}).
+\item \verb!\c! case splits the variable at the cursor (using \texttt{:casesplit}).
+\item \verb!\m! adds the missing cases for the name at the cursor (using \texttt{:addmissing}).
+\item \verb!\w! adds a \texttt{with} clause (using \texttt{:makewith}). 
+\item \verb!\o! invokes a proof search to solve the metavariable under the cursor (using \texttt{:proofsearch}).
+\item \verb!\p! invokes a proof search with additional hints to solve the metavariable under the cursor (using \texttt{:proofsearch}).
 \end{itemize}
 
 \noindent
 There are also commands to invoke the type checker and evaluator:
 
 \begin{itemize}
-\item \texttt{$\backslash$t} displays the type of the (globally visible) name under
-the cursor. In the case of a metavariable, this displays the context and
-the expected type.
-\item \texttt{$\backslash$e} prompts for an expression to evaluate.
-\item \texttt{$\backslash$r} reloads and type checks the buffer.
+\item\verb!\t! displays the type of the (globally visible) name under the cursor.
+In the case of a metavariable, this displays the context and the expected type.
+\item\verb!\e! prompts for an expression to evaluate.
+\item\verb!\r! reloads and type checks the buffer.
 \end{itemize}
 
 \noindent
-Corresponding commands are also available in the Emacs mode. Support for
-other editors can be added in a relatively straighforward manner by using
+Corresponding commands are also available in the Emacs mode.
+Support for other editors can be added in a relatively straighforward manner by using
 \texttt{idris --client}.
 
 

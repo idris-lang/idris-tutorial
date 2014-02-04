@@ -34,7 +34,7 @@ ForeignTy : (xs:List FTy) -> (t:FTy) -> Type
 \noindent
 A foreign function is assumed to be impure, so \texttt{ForeignTy} builds an \texttt{IO} type, for example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 Idris> ForeignTy [FInt, FString] FString
 Int -> String -> IO String : Type
 
@@ -85,7 +85,7 @@ Additionally, as it neither generates C code nor compiles to machine code, the \
 IO actions and FFI calls can be tested using the special REPL command \texttt{:x EXPR}, and C libraries can be dynamically loaded in the interpreter by using the \texttt{:dynamic} command or the \texttt{\%dynamic} directive.
 For example:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 Idris> :dynamic libm.so
 Idris> :x unsafePerformIO ((mkForeign (FFun "sin" [FFloat] FFloat)) 1.6)
 0.9995736030415051 : Float

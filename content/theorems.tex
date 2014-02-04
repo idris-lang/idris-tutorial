@@ -116,17 +116,17 @@ plusReducesZ' (S k) = let ih = plusReducesZ' k in
 \end{code}
 
 \noindent
-On running \Idris{}, two global names are created, \texttt{plusredZ\_O} and \texttt{plusredZ\_S}, with no definition.
+On running \Idris{}, two global names are created, \texttt{plusredZ\_Z} and \texttt{plusredZ\_S}, with no definition.
 We can use the \texttt{:m} command at the prompt to find out which metavariables are still to be solved (or, more precisely, which functions exist but have no definitions), then the \texttt{:t} command to see their types:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :m 
 Global metavariables:
         [plusredZ_S,plusredZ_Z]
 
 \end{lstlisting}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :t plusredZ_Z
 plusredZ_Z : Z = plus Z Z
 
@@ -137,7 +137,7 @@ plusredZ_S : (k : Nat) -> (k = plus k Z) -> S k = plus (S k) Z
 \noindent
 The \texttt{:p} command enters interactive proof mode, which can be used to complete the missing definitions.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :p plusredZ_Z
 
 ---------------------------------- (plusredZ_Z) --------
@@ -149,7 +149,7 @@ This gives us a list of premises (above the line; there are none here) and the c
 At the prompt we can enter tactics to direct the construction of the proof.
 In this case, we can normalise the goal with the \texttt{compute} tactic:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -plusredZ_Z> compute
 
 ---------------------------------- (plusredZ_Z) --------
@@ -160,7 +160,7 @@ In this case, we can normalise the goal with the \texttt{compute} tactic:
 Now we have to prove that \texttt{Z} equals \texttt{Z}, which is easy to prove by \texttt{refl}.
 To apply a function, such as \texttt{refl}, we use \texttt{refine} which introduces subgoals for each of the function's explicit arguments (\texttt{refl} has none):
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -plusredZ_Z> refine refl
 plusredZ_Z: no more goals
 \end{lstlisting}
@@ -178,7 +178,7 @@ plusredZ_Z = proof {
 }
 \end{code}
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :m 
 Global metavariables:
         [plusredZ_S]
@@ -188,7 +188,7 @@ Global metavariables:
 The \texttt{:addproof} command, at the interactive prompt, will add the proof to the source file (effectively in an appendix).
 Let us now prove the other required lemma, \texttt{plusredZ\_S}:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :p plusredZ_S
 
 ---------------------------------- (plusredZ_S) --------
@@ -200,7 +200,7 @@ In this case, the goal is a function type, using \texttt{k} (the argument access
 We can introduce these as premisses using the \texttt{intro} tactic twice (or \texttt{intros}, which introduces all arguments as premisses).
 This gives:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
   k : Nat
   ih : k = plus k Z
 ---------------------------------- (plusredZ_S) --------
@@ -210,7 +210,7 @@ This gives:
 \noindent
 Since plus is defined is defined by recursion on its first argument, the term \texttt{plus (S k) Z} in the goal can be simplified, so we use \texttt{compute}.
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
   k : Nat
   ih : k = plus k Z
 ---------------------------------- (plusredZ_S) --------
@@ -221,7 +221,7 @@ Since plus is defined is defined by recursion on its first argument, the term \t
 We know, from the type of \texttt{ih}, that \texttt{k = plus k Z}, so we would like to use this knowledge to replace \texttt{plus k Z} in the goal with \texttt{k}.
 We can achieve this with the \texttt{rewrite} tactic:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -plusredZ_S> rewrite ih
 
   k : Nat
@@ -235,7 +235,7 @@ We can achieve this with the \texttt{rewrite} tactic:
 \noindent
 The \texttt{rewrite} tactic takes an equality proof as an argument, and tries to rewrite the goal using that proof. Here, it results in an equality which is trivially provable:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 -plusredZ_S> trivial
 plusredZ_S: no more goals
 -plusredZ_S> qed
@@ -271,7 +271,7 @@ empty2 = empty2
 Internally, \Idris{} checks every definition for totality, and we can check at the prompt with the \texttt{:total} command.
 We see that neither of the above definitions is total:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :total empty1
 possibly not total due to: empty1#hd
 	not total as there are missing cases
@@ -284,7 +284,7 @@ Note the use of the word ``possibly'' --- a totality check can, of course, never
 The check is, therefore, conservative.
 It is also possible (and indeed advisable, in the case of proofs) to mark functions as total so that it will be a compile time error for the totality check to fail:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 total empty2 : _|_
 empty2 = empty2
 
@@ -295,7 +295,7 @@ theorems.idr:25:empty2 is possibly not total due to recursive path empty2
 \noindent
 Reassuringly, our proof in Section~\ref{sect:empty} that the zero and successor constructors are disjoint is total:
 
-\begin{lstlisting}
+\begin{lstlisting}[style=stdout]
 *theorems> :total disjoint
 Total
 \end{lstlisting} 

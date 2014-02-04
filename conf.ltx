@@ -1,9 +1,16 @@
 %% This file contains configurations of used packages
 
-\lstset{%
-  basicstyle=\ttfamily,
+\lstdefinestyle{stdout}{%
   xleftmargin=\parindent,
-  tabsize=2
+  tabsize=2,
+  basicstyle=\small\ttfamily,
+  showstringspaces=false,
+  escapechar=^
+}
+
+\lstset{%
+  style=default,
+  showstringspaces=false
 }
 
 
@@ -38,3 +45,4 @@
 \setlist[compactenum,1]{label=\arabic*}
 \setlist[compactenum,2]{label=\alph*}
 \setlist[compactenum,3]{label=\roman*}
+

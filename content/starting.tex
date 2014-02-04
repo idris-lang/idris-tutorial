@@ -14,36 +14,33 @@ You will need:
 
 The easiest way to install \Idris{}, if you have all of the prerequisites, is to type:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 cabal update; cabal install idris
 \end{lstlisting}
 
 \noindent
-This will install the latest version released on Hackage, along with any dependencies. 
-If, however, you would like the most up to date development version, you can find it on GitHub at: \url{https://github.com/edwinb/Idris-dev}.
+This will install the latest version released on Hackage, along with any dependencies.
+If, however, you would like the most up to date development version you can find it, as well as build intructions, on GitHub at: \url{https://github.com/edwinb/Idris-dev}.
 
 To check that installation has succeeded, and to write your first \Idris{} program, create a file called ``\texttt{hello.idr}'' containing the following text:
 
-\begin{code}
-module Main
-
-main : IO ()
-main = putStrLn "Hello world"
-\end{code}
+\inputIdrisListing{./examples/hello.idr}
 
 \noindent
 If you are familiar with Haskell, it should be fairly clear what the program is doing and how it works, but if not, we will explain the details later.
-You can compile the program to an executable by entering \texttt{idris hello.idr -o hello} at the shell prompt. 
+You can compile the program to an executable by entering \texttt{idris hello.idr -o hello} at the shell prompt.
 This will create an executable called \texttt{hello}, which you can run:
 
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[style=stdout]
 $ idris hello.idr -o hello
 $ ./hello
 Hello world
 \end{lstlisting}
 
 \noindent
-Note that the \texttt{\$} indicates the shell prompt! Some useful options to the \Idris{} command are:
+Note that the \texttt{\$} indicates the shell prompt! 
+Should the \Idris{} executable not be found please ensure that you have added \verb!~/.cabal/bin! to your \verb!$PATH! environment variable.
+Some useful options to the \Idris{} command are:
 
 \begin{itemize}
 \item \texttt{-o prog} to compile to an executable called \texttt{prog}.
@@ -57,7 +54,7 @@ interactive environment.
 Entering \texttt{idris} at the shell prompt starts up the interactive environment.
 You should see something like the following:
 
-\begin{lstlisting}[escapechar=^]
+\begin{lstlisting}[style=stdout]
 $ idris
      ____    __     _                                          
     /  _/___/ /____(_)____                                     
@@ -73,9 +70,9 @@ This gives a \texttt{ghci}-style interface which allows evaluation of, as well a
 The command \texttt{:?} gives a list of supported commands, as shown in Listing~\ref{cmds}.
 Listing~\ref{run1} shows an example run in which \texttt{hello.idr} is loaded, the type of \texttt{main} is checked and then the program is compiled to the executable \texttt{hello}.
 
-\begin{lstlisting}[caption={Interactive environment commands}, label=cmds, escapechar=^]
+\begin{lstlisting}[caption={Interactive environment commands}, label=cmds, style=stdout, float=htp]
 Idris version ^\version{}^
---------------------
+----------------------
 
    Command         Arguments   Purpose
                                
@@ -110,7 +107,7 @@ Idris version ^\version{}^
    :q :quit                    Exit the Idris system
 \end{lstlisting}
 
-\begin{lstlisting}[caption={Sample Interactive Run}, label=run1, escapechar=^]
+\begin{lstlisting}[caption={Sample Interactive Run}, label=run1, style=stdout, float=htp]
 $ idris hello.idr
      ____    __     _                                          
     /  _/___/ /____(_)____                                     
@@ -120,7 +117,7 @@ $ idris hello.idr
 
 Type checking ./hello.idr
 *hello> :t main 
-main : IO ()
+Main.main : IO ()
 *hello> :c hello 
 *hello> :q 
 Bye bye
