@@ -62,7 +62,7 @@ fact = expr (\x => If (Op (==) x (Val 0))
 With some more ad-hoc overloading and type class instances, and a new syntax rule, we can even go as far as:
 
 \begin{code}
-syntax IF [x] THEN [t] ELSE [e] = If x t e
+syntax "IF" [x] "THEN" [t] "ELSE" [e] = If x t e
 
 fact : Expr G (TyFun TyInt TyInt)
 fact = expr (\x => IF x == 0 THEN 1 ELSE [| fact (x - 1) |] * x)
