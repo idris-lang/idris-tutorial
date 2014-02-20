@@ -96,6 +96,38 @@ main = do
 \noindent
 The program outputs \texttt{3}, just like we expected.
 
+\subsubsection*{Including external \emph{JavaScript} files}
+
+\noindent
+Whenever one is working with \emph{JavaScript} one might want to include
+external libraries or just some functions that she or he wants to call via
+FFI which are stored in external files. The \emph{JavaScript} and \emph{NodeJS} code generators
+understand the \texttt{\%include} directive. Keep in mind that \emph{JavaScript} and \emph{NodeJS}
+are handled as different code generators, therefore you will have to state which one you want to target.
+This means that you can include different files for \emph{JavaScript} and \emph{NodeJS} in the same
+\Idris{} source file.
+
+\noindent
+So whenever you want to add an external \emph{JavaScript} file
+you can do this like so:
+
+\noindent
+For \emph{NodeJS}:
+
+\begin{code}
+  %include Node "path/to/external.js"
+\end{code}
+
+\noindent
+And for use in the browser:
+
+\begin{code}
+  %include JavaScript "path/to/external.js"
+\end{code}
+
+\noindent
+The given files will be added to the top of the generated code.
+
 \subsubsection*{Shrinking down generated \emph{JavaScript}}
 
 \Idris{} can produce very big chunks of \emph{JavaScript} code.
