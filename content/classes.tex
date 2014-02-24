@@ -201,6 +201,50 @@ Just 42 : Maybe Int
 Nothing : Maybe Int
 \end{lstlisting}
 
+\subsubsection*{\texttt{!}-notation}
+
+In many cases, using \texttt{do}-notation can make programs unnecessarily
+verbose, particularly in cases such as \texttt{m\_add} above where the value
+bound is used once, immediately. In these cases, we can use a shorthand
+version, as follows:
+
+\begin{code}
+m_add : Maybe Int -> Maybe Int -> Maybe Int
+m_add x y = return (!x + !y)
+\end{code}
+
+\noindent
+The notation \texttt{!expr} means that the expression \texttt{expr} should
+be evaluated and then implicitly bound. Conceptually,
+we can think of \texttt{!} as being a prefix function with the following type:
+
+\begin{code}
+(!) : m a -> a
+\end{code}
+
+\noindent
+Note, however, that it is not really a function, merely syntax! In practice,
+a subexpression \texttt{!expr} will lift \texttt{expr} as high as possible within
+its current scope, bind it to a fresh name \texttt{x}, and replace \texttt{!expr}
+with \texttt{x}. Expressions are lifted depth first, left to right. In
+practice, \texttt{!}-notation allows us to program in a more direct style,
+while still giving a notational clue as to which expressions are monadic.
+
+For example, the expression\ldots
+
+\begin{code}
+let y = 42 in f !(g !(print y) !x) 
+\end{code}
+
+\ldots is lifted to:
+
+\begin{code}
+let y = 42 in do y' <- print y
+                 x' <- x
+                 g' <- f y' x'
+                 f g'
+\end{code}
+
 \subsubsection*{Monad comprehensions}
 
 The list comprehension notation we saw in Section~\ref{sec:listcomp} is more general, and applies to anything which is an instance of \texttt{MonadPlus}:
