@@ -328,3 +328,75 @@ Correspondingly, after a \texttt{\%default partial} declaration, the requirement
 
 Finally, the compiler flag \texttt{--warnpartial} causes \Idris{} to print a warning for any undeclared partial function.
 
+\subsubsection{Totality checking issues}
+
+Please note that the totality checker is not perfect! Firstly, it is necessarily
+conservative due to the undecidability of the halting problem, so many programs
+which \emph{are} total will not be detected as such. Secondly, the current
+implementation has had limited effort put into it so far, so there may still
+be cases where it believes a function is total which is not. Do not rely on it
+for your proofs yet!
+
+\subsubsection{Hints for totality}
+
+In cases where you believe a program is total, but \Idris{} does not agree,
+it is possible to give hints to the checker to give more detail for a
+termination argument. The checker works by ensuring that all chains of
+recursive calls eventually lead to one of the arguments decreasing towards
+a base case, but sometimes this is hard to spot. For example, the following
+definition cannot be checked as \texttt{total} because the checker cannot
+decide that \texttt{filter (<= x) xs} will always be smaller than \texttt{xs}:
+
+\begin{code}
+qsort : Ord a => List a -> List a
+qsort [] = []
+qsort (x :: xs)
+   = qsort (filter (<= x) xs) ++
+      (x :: qsort (filter (>= x) xs))
+\end{code}
+
+\noindent
+The function \texttt{assert\_smaller}, defined in the Prelude,
+is intended to address this problem:
+
+\begin{code}
+assert_smaller : a -> a -> a
+assert_smaller x y = y
+\end{code}
+
+\noindent
+It simply evaluates to its second argument, but also asserts to the totality
+checker than \texttt{y} is structurally smaller than \texttt{x}.  This can be
+used to explain the reasoning for totality if the checker cannot work it out
+itself. The above example can now be written as:
+    
+\begin{code}
+total
+qsort : Ord a => List a -> List a
+qsort [] = []
+qsort (x :: xs)
+   = qsort (assert_smaller (x :: xs) (filter (<= x) xs)) ++
+      (x :: qsort (assert_smaller (x :: xs) (filter (>= x) xs)))
+\end{code}
+
+\noindent
+The expression \texttt{assert\_smaller (x :: xs) (filter (<= x) xs)} asserts
+that the result of the filter will always be smaller than the pattern
+\texttt{(x :: xs)}.
+
+In more extreme cases, the function \texttt{assert\_total} marks a
+subexpression as always being total:
+
+\begin{code}
+assert_total : a -> a
+assert_total x = x
+\end{code}
+
+\noindent
+In general, this function should be avoided, but it can be very useful when
+reasoning about primitives or externally defined functions (for example from
+a C library) where totality can be shown by an external argument.
+
+
+
+
