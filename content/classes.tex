@@ -379,7 +379,7 @@ Before \texttt{Eval} can be an instance of \texttt{Applicative} it is necessary 
 
 \begin{code}
 instance Functor Eval where
-    fmap f (MkEval g) = MkEval (\e => fmap f (g e))
+    map f (MkEval g) = MkEval (\e => map f (g e))
 
 instance Applicative Eval where
     pure x = MkEval (\e => Just x)
