@@ -208,7 +208,7 @@ This gives:
 \end{lstlisting}
 
 \noindent
-Since plus is defined is defined by recursion on its first argument, the term \texttt{plus (S k) Z} in the goal can be simplified, so we use \texttt{compute}.
+Since plus is defined by recursion on its first argument, the term \texttt{plus (S k) Z} in the goal can be simplified, so we use \texttt{compute}.
 
 \begin{lstlisting}[style=stdout]
   k : Nat
@@ -345,13 +345,13 @@ termination argument. The checker works by ensuring that all chains of
 recursive calls eventually lead to one of the arguments decreasing towards
 a base case, but sometimes this is hard to spot. For example, the following
 definition cannot be checked as \texttt{total} because the checker cannot
-decide that \texttt{filter (<= x) xs} will always be smaller than \texttt{xs}:
+decide that \texttt{filter (<= x) xs} will always be smaller than \texttt{(x :: xs)}:
 
 \begin{code}
 qsort : Ord a => List a -> List a
 qsort [] = []
 qsort (x :: xs)
-   = qsort (filter (<= x) xs) ++
+   = qsort (filter (< x) xs) ++
       (x :: qsort (filter (>= x) xs))
 \end{code}
 
@@ -366,7 +366,7 @@ assert_smaller x y = y
 
 \noindent
 It simply evaluates to its second argument, but also asserts to the totality
-checker than \texttt{y} is structurally smaller than \texttt{x}.  This can be
+checker that \texttt{y} is structurally smaller than \texttt{x}.  This can be
 used to explain the reasoning for totality if the checker cannot work it out
 itself. The above example can now be written as:
     

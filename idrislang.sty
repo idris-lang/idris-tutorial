@@ -24,6 +24,7 @@
 \RequirePackage{ifthen}
 \RequirePackage{listings}
 \RequirePackage{xspace}
+\RequirePackage{textcomp}
 %% ----------------------------------------------------------------- [ Options ]
 \newboolean{literate}
 \setboolean{literate}{false}
@@ -185,8 +186,9 @@
 \lstnewenvironment{code}[1][]
     {\ifthenelse{\boolean{literate}}{%
         \lstset{language=literateidris}}{%
+        \lstset{upquote=true}
         \lstset{language=idris}}
-      \ifthenelse{\boolean{numbers}}{%
+     \ifthenelse{\boolean{numbers}}{%
         \lstset{style=numbers, #1}}{%
         \lstset{style=default, #1}}
     }
