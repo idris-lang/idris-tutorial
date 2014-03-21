@@ -1,19 +1,20 @@
 \subsection{\texttt{syntax} rules}
 
 We have seen \texttt{if...then...else} expressions, but these are not built in.
-Instead, we can define a function in the prelude as follows:
+Instead, we can define a function in the prelude as follows (we have already
+seen this function in Section~\ref{sect:lazy}:
 
 \begin{code}
-boolElim : (x:Bool) -> |(t : a) -> |(f : a) -> a; 
-boolElim True  t e = t;
-boolElim False t e = e;
+boolCase : (x:Bool) -> Lazy a -> Lazy a -> a; 
+boolCase True  t e = t;
+boolCase False t e = e;
 \end{code}
 
 \noindent
 and then extend the core syntax with a \texttt{syntax} declaration:
 
 \begin{code}
-syntax "if" [test] "then" [t] "else" [e] = boolElim test t e;
+syntax "if" [test] "then" [t] "else" [e] = boolCase test t e;
 \end{code}
 
 \noindent

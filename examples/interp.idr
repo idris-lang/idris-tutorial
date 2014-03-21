@@ -28,7 +28,7 @@ using (G : Vect n Ty)
       App : Expr G (TyFun a t) -> Expr G a -> Expr G t
       Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a -> Expr G b ->
             Expr G c
-      If  : Expr G TyBool -> Expr G a -> Expr G a -> Expr G a
+      If  : Expr G TyBool -> Lazy (Expr G a) -> Lazy (Expr G a) -> Expr G a
 
   interp : Env G -> [static] (e : Expr G t) -> interpTy t
   interp env (Var i)     = lookup i env
@@ -51,12 +51,9 @@ using (G : Vect n Ty)
   eDouble : Expr G (TyFun TyInt TyInt)
   eDouble = Lam (App (App eAdd (Var stop)) (Var stop))
 
-  app : |(f : Expr G (TyFun a t)) -> Expr G a -> Expr G t
-  app = \f, a => App f a
-
   fact : Expr G (TyFun TyInt TyInt)
   fact = Lam (If (Op (==) (Var stop) (Val 0))
-                 (Val 1) (Op (*) (app fact (Op (-) (Var stop) (Val 1))) (Var stop)))
+                 (Val 1) (Op (*) (App fact (Op (-) (Var stop) (Val 1))) (Var stop)))
 
 testFac : Int
 testFac = interp [] fact 4

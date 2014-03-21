@@ -443,6 +443,44 @@ return : a -> IO a
 \noindent
 As we will see later, \texttt{do} notation is more general than this, and can be overloaded.
 
+\subsection{Laziness}
+
+\label{sect:lazy}
+Normally, arguments to functions are evaluated before the function itself
+(that is, \Idris{} uses \emph{eager} evaluation). However, this is not always
+the best approach. Consider the following function:
+
+\begin{code}
+boolCase : Bool -> a -> a -> a; 
+boolCase True  t e = t;
+boolCase False t e = e;
+\end{code}
+
+\noindent
+This function uses one of the \texttt{t} or \texttt{e} arguments, but not both (in fact, this is used to implement the \texttt{if...then...else} construct as we will see later. 
+We would prefer if \emph{only} the argument which was used was evaluated.
+To achieve this, \Idris{} provides a \texttt{Lazy} data type, which allows evaluation to be suspended:
+
+\begin{code}
+data Lazy : Type -> Type where
+     Delay : (val : a) -> Lazy a
+
+Force : Lazy a -> a
+\end{code}
+
+\noindent
+A value of type \texttt{Lazy a} is unevaluated until it is forced by \texttt{Force}. 
+The \Idris{} type checker knows about the \texttt{Lazy} type, and inserts conversions where necessary between \texttt{Lazy a} and \texttt{a}, and vice versa.
+We can therefore write \texttt{boolCase} as follows, without any explicit
+use of \texttt{Force} or \texttt{Delay}:
+
+\begin{code}
+boolCase : Bool -> Lazy a -> Lazy a -> a; 
+boolCase True  t e = t;
+boolCase False t e = e;
+\end{code}
+
+
 \subsection{Useful Data Types}
 
 \Idris{} includes a number of useful data types and library functions (see the \texttt{libs/} directory in the distribution).
@@ -560,16 +598,12 @@ For example, looking something up in a \texttt{List} (rather than a vector) may 
 The \texttt{maybe} function is used to process values of type \texttt{Maybe}, either by applying a function to the value, if there is one, or by providing a default value:
 
 \begin{code}
-maybe : Maybe a -> |(default:b) -> (a -> b) -> b
+maybe : Lazy b -> (a -> b) -> Maybe a -> b
 \end{code}
 
-
 \noindent
-The vertical bar $\mid$ before the default value is a laziness annotation.
-Normally expressions are evaluated before being passed to a function.
-This is typically the most efficient behaviour.
-However, in this case, the default value might not be used and if it is a large expression, evaluating it will be wasteful. 
-The $\mid$ annotation tells the compiler not to evaluate the argument until it is needed.
+Note that the type of the first argument is \texttt{Lazy b} rather than simply \texttt{b}.
+Since the default value might not be used, we mark it as \texttt{Lazy} in case it is a large expression where evaluating it then discarding it would be wasteful.
 
 \subsubsection{Tuples and Dependent Pairs}
 
