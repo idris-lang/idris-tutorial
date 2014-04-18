@@ -114,7 +114,7 @@ S (S (S (S (S (S (S (S (S (S (S (S Z))))))))))) : Nat
 You may wonder, by the way, why we have unary natural numbers when our computers have perfectly good integer arithmetic built in.
 The reason is primarily that unary numbers have a very convenient structure which is easy to reason about, and easy to relate to other data structures as we will see later.
 Nevertheless, we do not want this convenience to be at the expense of efficiency.
-Fortunately, \Idris{} knows about the relationship between \tTC{Nat} (and similarly structured types) and numbers, so optimises the representation and functions such as \tFN{plus} and \tFN{mult}.
+Fortunately, \Idris{} knows about the relationship between \tTC{Nat} (and similarly structured types) and numbers. This means it can optimise the representation, and functions such as \tFN{plus} and \tFN{mult}.
 
 \subsubsection*{\texttt{where} clauses}
 
