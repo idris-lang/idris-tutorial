@@ -68,7 +68,7 @@ The first of these has the following type:
 *views> :p views.parity_lemma_1 
 
 ---------------------------------- (views.parity_lemma_1) --------
-{hole0} : (j : Nat) -> (Parity (plus (S j) (S j))) -> Parity (S (S (j + j)))
+{hole0} : (j : Nat) -> (Parity (plus (S j) (S j))) -> Parity (S (S (plus j j)))
 
 -views.parity_lemma_1>  
 \end{lstlisting}
@@ -84,22 +84,21 @@ plusSuccRightSucc : (left : Nat) -> (right : Nat) ->
 \end{code}
 
 \noindent
-After applying \texttt{intro} twice, we have:
+We need to use \texttt{compute} again to unfold the definition of \texttt{plus}:
 
 \begin{lstlisting}[style=stdout]
--views.parity_lemma_1> intro 
+-views.parity_lemma_1> compute
 
-  j : Nat
-  value : Parity (S (plus j (S j)))
+
 ---------------------------------- (views.parity_lemma_1) --------
-{hole2} : Parity (S (S (j + j)))
+{hole0} : (j : Nat) -> (Parity (S (plus j (S j)))) -> Parity (S (S (plus j j)))
 \end{lstlisting}
 
 \noindent
-We need to use \texttt{compute} again to unfold the definition of \texttt{(+)}.
+After applying \texttt{intros} we have:
 
 \begin{lstlisting}[style=stdout]
--views.parity_lemma_1> intro 
+-views.parity_lemma_1> intros
 
   j : Nat
   value : Parity (S (plus j (S j)))
@@ -112,7 +111,7 @@ Then we apply the \texttt{plusSuccRightSucc} rewrite rule, symmetrically, to \te
 
 \begin{lstlisting}[style=stdout]
 -views.parity_lemma_1> rewrite sym (plusSuccRightSucc j j) 
- 
+
   j : Nat
   value : Parity (S (plus j (S j)))
 ---------------------------------- (views.parity_lemma_1) --------
