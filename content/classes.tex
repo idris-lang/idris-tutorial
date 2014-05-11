@@ -241,7 +241,7 @@ let y = 42 in f !(g !(print y) !x)
 \begin{code}
 let y = 42 in do y' <- print y
                  x' <- x
-                 g' <- f y' x'
+                 g' <- g y' x'
                  f g'
 \end{code}
 
