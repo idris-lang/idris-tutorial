@@ -862,4 +862,25 @@ ClassInfo (prelude.vect.:: (MkPerson "Fred" 30) (prelude.vect.Nil)) "CS"
   : Class
 \end{lstlisting}
 
+\subsubsection*{Nested record update}
+
+\Idris{} also provides a convenient syntax for accessing and updating nested
+records. For example, if a field is accessible with the expression
+\texttt{c (b (a x))}, it can be updated using the following syntax:
+
+\begin{code}
+record { a->b->c = val } x 
+\end{code}
+
+\noindent
+This returns a new record, with the field accessed by the path 
+\texttt{a->b->c} set to \texttt{x}. The syntax is first class, i.e.
+\texttt{record \{ a->b->c = val \}} itself has a function type.
+Symmetrically, the field can also be accessed with the following syntax:
+
+\begin{code}
+record { a->b->c } x
+\end{code}
+
+
 
