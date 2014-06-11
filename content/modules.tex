@@ -117,7 +117,7 @@ They may also be dependent types with implicit arguments:
 \begin{code}
 parameters (xs : Vect x a, y : Nat)
     data Vects : Type -> Type where
-         MkVects : Vect a y -> Vects a
+         MkVects : Vect y a -> Vects a
   
     append : Vects a -> Vect (x + y) a
     append (MkVects ys) = xs ++ ys
