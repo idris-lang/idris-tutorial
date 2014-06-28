@@ -128,6 +128,23 @@ And for use in the browser:
 \noindent
 The given files will be added to the top of the generated code.
 
+\subsubsection*{Including \emph{NodeJS} modules}
+
+\noindent
+The \emph{NodeJS} code generator can also include modules with the \texttt{\%lib}
+directive.
+
+\begin{code}
+  %lib Node "fs"
+\end{code}
+
+\noindent
+This directive compiles into the following \emph{JavaScript}
+
+\begin{code}
+  var fs = require("fs");
+\end{code}
+
 \subsubsection*{Shrinking down generated \emph{JavaScript}}
 
 \Idris{} can produce very big chunks of \emph{JavaScript} code.
