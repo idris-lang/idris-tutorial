@@ -50,13 +50,13 @@ data List a = Nil | (::) a (List a) -- Polymorphic lists
 
 \noindent
 The above declarations are taken from the standard library.
-Unary natural numbers can be either zero (\texttt{Z}), or the successor of another natural number (\texttt{S k}). 
+Unary natural numbers can be either zero (\texttt{Z}), or the successor of another natural number (\texttt{S k}).
 Lists can either be empty (\texttt{Nil}) or a value added to the front of another list (\texttt{x :: xs}).
 In the declaration for \tTC{List}, we used an infix operator \tDC{::}.
 New operators such as this can be added using a fixity declaration, as follows:
 
 \begin{code}
-infixr 10 :: 
+infixr 10 ::
 \end{code}
 
 \noindent
@@ -90,24 +90,31 @@ mult (S k) y = plus y (mult k y)
 The standard arithmetic operators \texttt{+} and \texttt{*} are also overloaded for use by \texttt{Nat}, and are implemented using the above functions.
 Unlike Haskell, there is no restriction on whether types and function names must begin with a capital letter or not.
 Function names (\tFN{plus} and \tFN{mult} above), data constructors (\tDC{Z}, \tDC{S}, \tDC{Nil} and \tDC{::}) and type constructors (\tTC{Nat} and \tTC{List}) are all part of the same namespace.
-
 We can test these functions at the \Idris{} prompt:
 
 \begin{lstlisting}[style=stdout]
 Idris> plus (S (S Z)) (S (S Z))
-S (S (S (S Z))) : Nat
+4 : Nat
 Idris> mult (S (S (S Z))) (plus (S (S Z)) (S (S Z)))
-S (S (S (S (S (S (S (S (S (S (S (S Z))))))))))) : Nat
+12 : Nat
+\end{lstlisting}
+
+\noindent
+\textbf{Note:} \Idris{} automatically desugars the \texttt{Nat} representation into a more human readable format. The result of \verb!plus (S (S Z)) (S (S Z))! is actually \verb!(S (S (S (S Z))))! which is the Integer 4. This can be checked at the \Idris{} prompt:
+
+\begin{lstlisting}[style=stdout]
+Idris> (S (S (S (S Z))))
+4 : Nat
 \end{lstlisting}
 
 \noindent
 Like arithmetic operations, integer literals are also overloaded using type classes, meaning that we can also test the functions as follows:
 
 \begin{lstlisting}[style=stdout]
-Idris> plus 2 2 
-S (S (S (S Z))) : Nat
+Idris> plus 2 2
+4 : Nat
 Idris> mult 3 (plus 2 2)
-S (S (S (S (S (S (S (S (S (S (S (S Z))))))))))) : Nat
+12 : Nat
 \end{lstlisting}
 
 \noindent
@@ -132,9 +139,9 @@ reverse xs = revAcc [] xs where
 \noindent
 Indentation is significant --- functions in the \texttt{where} block must be indented further than the outer function.
 
-\textbf{Scope:} 
+\textbf{Scope:}
 Any names which are visible in the outer scope are also visible in the \texttt{where} clause (unless they have been redefined, such as \texttt{xs} here).
-A name which appears only in the type will be in scope in the \texttt{where} clause if it is a \emph{parameter} to one of the types, i.e.\ it is fixed across the entire structure. 
+A name which appears only in the type will be in scope in the \texttt{where} clause if it is a \emph{parameter} to one of the types, i.e.\ it is fixed across the entire structure.
 
 As well as functions, \texttt{where} blocks can include local data declarations, such as the following where \texttt{MyLT} is not accessible outside the definition of \texttt{foo}:
 
@@ -155,7 +162,7 @@ In general, functions defined in a \texttt{where} clause need a type declaration
 However, the type declaration for a function \texttt{f} \emph{can} be omitted if:
 
 \begin{itemize}
-\item \texttt{f} appears in the right hand side of the top level definition 
+\item \texttt{f} appears in the right hand side of the top level definition
 \item The type of \texttt{f} can be completely determined from its first application
 \end{itemize}
 
@@ -244,12 +251,12 @@ data Fin : Nat -> Type where
 \end{code}
 
 \noindent
-\tDC{fZ} is the zeroth element of a finite set with \texttt{S k} elements; \texttt{fS n} is the \texttt{n+1}th element of a finite set with \texttt{S k} elements. 
+\tDC{fZ} is the zeroth element of a finite set with \texttt{S k} elements; \texttt{fS n} is the \texttt{n+1}th element of a finite set with \texttt{S k} elements.
 \tTC{Fin} is indexed by a \tTC{Nat}, which represents the number of elements in the set.
 Obviously we can't construct an element of an empty set, so neither constructor targets \texttt{Fin Z}.
 
 A useful application of the \tTC{Fin} family is to represent bounded natural numbers.
-Since the first \tTC{n} natural numbers form a finite set of \tTC{n} elements, we can treat \tTC{Fin n} as the set of natural numbers bounded by \tTC{n}. 
+Since the first \tTC{n} natural numbers form a finite set of \tTC{n} elements, we can treat \tTC{Fin n} as the set of natural numbers bounded by \tTC{n}.
 
 For example, the following function which looks up an element in a \tTC{Vect}, by a bounded index given as a \tTC{Fin n}, is defined in the prelude:
 
@@ -266,7 +273,7 @@ need for a run-time bounds check.
 The type checker guarantees that the location is no larger than the length of the vector.
 
 Note also that there is no case for \texttt{Nil} here.
-This is because it is impossible. Since there is no element of \texttt{Fin Z}, and the location is a \texttt{Fin n}, then \texttt{n} can not be \tDC{Z}. 
+This is because it is impossible. Since there is no element of \texttt{Fin Z}, and the location is a \texttt{Fin n}, then \texttt{n} can not be \tDC{Z}.
 As a result, attempting to look up an element in an empty vector would give a compile time type error, since it would force \texttt{n} to be \tDC{Z}.
 
 \subsubsection{Implicit Arguments}
@@ -320,7 +327,7 @@ data Elem : a -> Vect n a -> Type where
 \end{code}
 
 \noindent
-An instance of \texttt{Elem x xs} states that \texttt{x} is an element of 
+An instance of \texttt{Elem x xs} states that \texttt{x} is an element of
 \texttt{xs}.
 We can construct such a predicate if the required element is \texttt{here}, at the head of the vector, or \texttt{there}, in the tail of the vector.
 For example:
@@ -436,8 +443,8 @@ greet = do putStr "What is your name? "
 
 
 \noindent
-The syntax \texttt{x <- iovalue} executes the I/O operation \texttt{iovalue}, of type \texttt{IO a}, and puts the result, of type \texttt{a} into the variable \texttt{x}. 
-In this case, \texttt{getLine} returns an \texttt{IO String}, so \texttt{name} has type \texttt{String}. 
+The syntax \texttt{x <- iovalue} executes the I/O operation \texttt{iovalue}, of type \texttt{IO a}, and puts the result, of type \texttt{a} into the variable \texttt{x}.
+In this case, \texttt{getLine} returns an \texttt{IO String}, so \texttt{name} has type \texttt{String}.
 Indentation is significant --- each statement in the do block must begin in the same column.
 The \texttt{return} operation allows us to inject a value directly into an IO operation:
 
@@ -456,13 +463,13 @@ Normally, arguments to functions are evaluated before the function itself
 the best approach. Consider the following function:
 
 \begin{code}
-boolCase : Bool -> a -> a -> a; 
+boolCase : Bool -> a -> a -> a;
 boolCase True  t e = t;
 boolCase False t e = e;
 \end{code}
 
 \noindent
-This function uses one of the \texttt{t} or \texttt{e} arguments, but not both (in fact, this is used to implement the \texttt{if...then...else} construct as we will see later. 
+This function uses one of the \texttt{t} or \texttt{e} arguments, but not both (in fact, this is used to implement the \texttt{if...then...else} construct as we will see later.
 We would prefer if \emph{only} the argument which was used was evaluated.
 To achieve this, \Idris{} provides a \texttt{Lazy} data type, which allows evaluation to be suspended:
 
@@ -474,13 +481,13 @@ Force : Lazy a -> a
 \end{code}
 
 \noindent
-A value of type \texttt{Lazy a} is unevaluated until it is forced by \texttt{Force}. 
+A value of type \texttt{Lazy a} is unevaluated until it is forced by \texttt{Force}.
 The \Idris{} type checker knows about the \texttt{Lazy} type, and inserts conversions where necessary between \texttt{Lazy a} and \texttt{a}, and vice versa.
 We can therefore write \texttt{boolCase} as follows, without any explicit
 use of \texttt{Force} or \texttt{Delay}:
 
 \begin{code}
-boolCase : Bool -> Lazy a -> Lazy a -> a; 
+boolCase : Bool -> Lazy a -> Lazy a -> a;
 boolCase True  t e = t;
 boolCase False t e = e;
 \end{code}
@@ -506,7 +513,7 @@ data Vect : Nat -> Type -> Type where
 
 \noindent
 Note that the constructor names are the same for each --- constructor names (in fact, names in general) can be overloaded, provided that they are declared in different namespaces (see Section \ref{sect:namespaces}), and will typically be resolved according to their type.
-As syntactic sugar, any type with the constructor names \texttt{Nil} and \texttt{::} can be written in list form. 
+As syntactic sugar, any type with the constructor names \texttt{Nil} and \texttt{::} can be written in list form.
 For example:
 
 \begin{itemize}
@@ -538,7 +545,7 @@ For example, given the following vector of integers, and a function to double an
 the function \texttt{map} can be used as follows to double every element in the vector:
 
 \begin{lstlisting}[style=stdout]
-*usefultypes> show (map double intVec) 
+*usefultypes> show (map double intVec)
 "[2, 4, 6, 8, 10]" : String
 \end{lstlisting}
 
@@ -580,7 +587,7 @@ We could also use an operator section:
 
 \noindent
 \lstinline!(*2)! is shorthand for a function which multiplies a number by 2.
-It expands to \lstinline!\x => x * 2!. 
+It expands to \lstinline!\x => x * 2!.
 Similarly, \texttt{(2*)} would expand to \lstinline!\x => 2 * x!.
 
 \subsubsection{Maybe}
@@ -713,7 +720,7 @@ The \texttt{so} data type is a predicate on \texttt{Bool} which guarantees that 
 data so : Bool -> Type where
     oh : so True
 \end{code}
- 
+
 \noindent
 This is most useful for providing a static guarantee that a dynamic check has been made.
 For example, we might provide a safe interface to a function which draws a pixel on a graphical display as follows, where \texttt{so (inBounds x y)} guarantees that  the point \texttt{(x,y)} is within the bounds of a $640\times480$ window:
@@ -725,7 +732,7 @@ inBounds x y = x >= 0 && x < 640 && y >= 0 && y < 480
 drawPoint : (x : Int) -> (y : Int) -> so (inBounds x y) -> IO ()
 drawPoint x y p = unsafeDrawPoint x y
 \end{code}
- 
+
 
 \subsection{More Expressions}
 
@@ -734,13 +741,13 @@ drawPoint x y p = unsafeDrawPoint x y
 Intermediate values can be calculated using \texttt{let} bindings:
 
 \inputIdrisListing[firstline=3, lastline=6]{./examples/letbind.idr}
- 
+
 \noindent
 We can do simple pattern matching in \texttt{let} bindings too.
 For example, we can extract fields from a record as follows, as well as by pattern matching at the top level:
 
 \inputIdrisListing[firstline=7, lastline=12]{./examples/letbind.idr}
- 
+
 \subsubsection*{List comprehensions}
 \label{sec:listcomp}
 
@@ -750,7 +757,7 @@ The general form is:
 \begin{lstlisting}[style=stdout]
 [ expression | qualifiers ]
 \end{lstlisting}
- 
+
 \noindent
 This generates the list of values produced by evaluating the \texttt{expression}, according to the conditions given by the comma separated \texttt{qualifiers}.
 For example, we can build a list of Pythagorean triples as follows:
@@ -760,12 +767,12 @@ pythag : Int -> List (Int, Int, Int)
 pythag n = [ (x, y, z) | z <- [1..n], y <- [1..z], x <- [1..y],
                          x*x + y*y == z*z ]
 \end{code}
- 
+
 
 \noindent
 The \texttt{[a..b]} notation is another shorthand which builds a list of numbers between \texttt{a} and \texttt{b}.
 Alternatively \texttt{[a,b..c]} builds a list of numbers between \texttt{a} and \texttt{c} with the increment specified by the difference between \texttt{a} and \texttt{b}.
-This works for any numeric type, using the \texttt{count} function from the prelude. 
+This works for any numeric type, using the \texttt{count} function from the prelude.
 
 \subsubsection*{\texttt{case} expressions}
 
@@ -796,15 +803,15 @@ If the index is in bounds, we get the value at that index, otherwise we get a de
 *usefultypes> lookup_default 4 [3,4,5,6] (-1)
 -1 : Integer
 \end{lstlisting}
- 
+
 
 \noindent
-\textbf{Restrictions:} The \texttt{case} construct is intended for simple analysis of intermediate expressions to avoid the need to write auxiliary functions, and is also used internally to implement pattern matching \texttt{let} and lambda bindings. 
+\textbf{Restrictions:} The \texttt{case} construct is intended for simple analysis of intermediate expressions to avoid the need to write auxiliary functions, and is also used internally to implement pattern matching \texttt{let} and lambda bindings.
 It will \emph{only} work if:
 
 \begin{itemize}
 \item Each branch \emph{matches} a value of the same type, and \emph{returns} a value of the same type.
-\item The type of the result is ``known''. i.e.\ the type of the expression can be determined \emph{without} type checking the \texttt{case}-expression itself. 
+\item The type of the result is ``known''. i.e.\ the type of the expression can be determined \emph{without} type checking the \texttt{case}-expression itself.
 \end{itemize}
 
 \subsection{Dependent Records}
@@ -821,7 +828,7 @@ record Person : Type where
 fred : Person
 fred = MkPerson "Fred" 30
 \end{code}
- 
+
 
 \noindent
 Record declarations are like \texttt{data} declarations, except that they are  introduced by the \texttt{record} keyword, and can only have one constructor.
@@ -847,7 +854,7 @@ MkPerson "Jim" 20 : Person
 \end{lstlisting}
 
 \noindent
-The syntax \texttt{record \{ field = val, ... \}} generates a function which updates the given fields in a record. 
+The syntax \texttt{record \{ field = val, ... \}} generates a function which updates the given fields in a record.
 
 Records, and fields within records, can have dependent types.
 Updates are allowed to change the type of a field, provided that the result is well-typed, and the result does not affect the type of the record as a whole.
@@ -870,7 +877,7 @@ addStudent p c = record { students = p :: students c } c
 
 \begin{lstlisting}[style=stdout]
 *record> addStudent fred (ClassInfo [] "CS")
-ClassInfo (prelude.vect.:: (MkPerson "Fred" 30) (prelude.vect.Nil)) "CS" 
+ClassInfo (prelude.vect.:: (MkPerson "Fred" 30) (prelude.vect.Nil)) "CS"
   : Class
 \end{lstlisting}
 
@@ -893,6 +900,5 @@ Symmetrically, the field can also be accessed with the following syntax:
 \begin{code}
 record { a->b->c } x
 \end{code}
-
 
 
