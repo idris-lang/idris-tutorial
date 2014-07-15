@@ -1,3 +1,48 @@
+\subsection{C Target}
+
+The default target of \Idris{} is C. Compiling via : 
+
+\begin{lstlisting}[style=stdout]
+$ idris hello.idr -o hello
+\end{lstlisting}
+
+\noindent
+is equivalent to : 
+
+\begin{lstlisting}[style=stdout]
+$ idris --codegen C hello.idr -o hello
+\end{lstlisting}
+
+\noindent
+When the command above is used, a temporary C
+source is generated, which is then compiled into 
+an executable named \texttt{hello}.  
+
+\noindent
+In order to view the generated C code, compile 
+via : 
+
+\begin{lstlisting}[style=stdout]
+$ idris hello.idr -S -o hello.c
+\end{lstlisting}
+
+\noindent
+To turn optimisations on,  use the \texttt{\%flag C} 
+pragma within the code, as is shown below : 
+
+\begin{code}
+module Main
+%flag C "-O3"
+
+factorial : Int -> Int
+factorial 0 = 1
+factorial n = n * (factorial (n-1))
+
+main : IO ()
+main = do      
+     putStrLn $ show $ factorial 3
+\end{code}
+
 \subsection{JavaScript Target}
 
 \Idris{} is capable of producing \emph{JavaScript} code that can be run in a browser as well as in the \emph{NodeJS} environment or alike.
