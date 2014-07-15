@@ -1,6 +1,6 @@
 \section{Getting Started}
 
-\subsection{Prerequisites} 
+\subsection{Prerequisites}
 
 Before installing \Idris{}, you will need to make sure you have all of the necessary libraries and tools.
 You will need:
@@ -38,15 +38,15 @@ Hello world
 \end{lstlisting}
 
 \noindent
-Note that the \texttt{\$} indicates the shell prompt! 
+Note that the \texttt{\$} indicates the shell prompt!
 Should the \Idris{} executable not be found please ensure that you have added \verb!~/.cabal/bin! to your \verb!$PATH! environment variable.
 Some useful options to the \Idris{} command are:
 
 \begin{itemize}
-\item \texttt{-o prog} to compile to an executable called \texttt{prog}.
-\item \texttt{--check} type check the file and its dependencies without starting the 
+\item \verb!-o prog! to compile to an executable called \texttt{prog}.
+\item \verb!--check! type check the file and its dependencies without starting the
 interactive environment.
-\item \texttt{--help} display usage summary and command line options
+\item \verb!--help! display usage summary and command line options
 \end{itemize}
 
 \subsection{The Interactive Environment}
@@ -56,11 +56,11 @@ You should see something like the following:
 
 \begin{lstlisting}[style=stdout]
 $ idris
-     ____    __     _                                          
-    /  _/___/ /____(_)____                                     
+     ____    __     _
+    /  _/___/ /____(_)____
     / // __  / ___/ / ___/     Version ^\version{}^
-  _/ // /_/ / /  / (__  )      http://www.idris-lang.org/      
- /___/\__,_/_/  /_/____/       Type :? for help      
+  _/ // /_/ / /  / (__  )      http://www.idris-lang.org/
+ /___/\__,_/_/  /_/____/       Type :? for help
 
 Idris>
 \end{lstlisting}
@@ -75,7 +75,7 @@ Idris version ^\version{}^
 ----------------------
 
    Command         Arguments   Purpose
-                               
+
    <expr>                      Evaluate an expression
    :t              <expr>      Check the type of an expression
    :miss :missing  <name>      Show missing clauses
@@ -93,7 +93,7 @@ Idris version ^\version{}^
    :rmproof        <name>      Remove proof from proof stack
    :showproof      <name>      Show proof
    :proofs                     Show available proofs
-   :x              <expr>      Execute IO actions resulting from an expression 
+   :x              <expr>      Execute IO actions resulting from an expression
                                using the interpreter
    :c :compile     <filename>  Compile to an executable <filename>
    :js :javascript <filename>  Compile to JavaScript <filename>
@@ -109,23 +109,22 @@ Idris version ^\version{}^
 
 \begin{lstlisting}[caption={Sample Interactive Run}, label=run1, style=stdout, float=htp]
 $ idris hello.idr
-     ____    __     _                                          
-    /  _/___/ /____(_)____                                     
+     ____    __     _
+    /  _/___/ /____(_)____
     / // __  / ___/ / ___/     Version ^\version{}^
-  _/ // /_/ / /  / (__  )      http://www.idris-lang.org/      
- /___/\__,_/_/  /_/____/       Type :? for help        
+  _/ // /_/ / /  / (__  )      http://www.idris-lang.org/
+ /___/\__,_/_/  /_/____/       Type :? for help
 
 Type checking ./hello.idr
-*hello> :t main 
+*hello> :t main
 Main.main : IO ()
-*hello> :c hello 
-*hello> :q 
+*hello> :c hello
+*hello> :q
 Bye bye
-$ ./hello 
+$ ./hello
 Hello world
 \end{lstlisting}
 
 \noindent
 Type checking a file, if successful, creates a bytecode version of the file (in this case \texttt{hello.ibc}) to speed up loading in future.
 The bytecode is regenerated if the source file changes.
-
