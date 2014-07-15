@@ -211,21 +211,24 @@ Which when run through the \Idris{} type checker results in the following:
 
 \begin{lstlisting}[style=stdout]
 $ idris vbroken.idr --check
-vbroken.idr:3:6:When elaborating right hand side of vapp:
-Can't unify
-	Vect n a
-with
-	Vect m a
-
-Specifically:
-	Can't unify
-		n
-	with
-		m
+vbroken.idr:3:23:When elaborating right hand side of vapp:
+When elaborating argument xs to constructor Prelude.Vect.:::
+        Can't unify
+                Vect (n + n) a
+        with
+                Vect (plus n m) a
+        
+        Specifically:
+                Can't unify
+                        plus n n
+                with
+                        plus n m
 \end{lstlisting}
 
 \noindent
-This error message suggests that there is a length mismatch between two vectors --- we needed a vector of length \texttt{m}, but provided a vector of length \texttt{n}.
+This error message suggests that there is a length mismatch between two vectors
+--- we needed a vector of length \texttt{n + m}, but provided a vector of length
+\texttt{n + n}.
 
 % Note that the terms in the error message have been \emph{normalised}, so in particular \texttt{n + m} has been reduced to \texttt{plus n m}.
 

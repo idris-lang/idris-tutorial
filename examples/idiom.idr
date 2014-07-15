@@ -8,7 +8,7 @@ data Eval : Type -> Type where
    MkEval : (List (String, Int) -> Maybe a) -> Eval a
 
 fetch : String -> Eval Int
-fetch x = MkEval (\e => fetchVal e) where
+fetch x = MkEval fetchVal where
     fetchVal : List (String, Int) -> Maybe Int
     fetchVal [] = Nothing
     fetchVal ((v, val) :: xs) = if (x == v) then (Just val) else (fetchVal xs)
