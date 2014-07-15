@@ -38,7 +38,7 @@ disjoint n p = replace {P = disjointTy} p ()
     disjointTy : Nat -> Type
     disjointTy Z = ()
     disjointTy (S k) = _|_
-\end{code} 
+\end{code}
 
 \noindent
 There is no need to worry too much about how this function works --- essentially, it applies the library function \texttt{replace}, which uses an equality proof to  transform a predicate.
@@ -49,7 +49,7 @@ Once we have an element of the empty type, we can prove anything.
 
 \begin{code}
 FalseElim : _|_ -> a
-\end{code} 
+\end{code}
 
 \subsection{Simple Theorems}
 
@@ -120,7 +120,7 @@ On running \Idris{}, two global names are created, \texttt{plusredZ\_Z} and \tex
 We can use the \texttt{:m} command at the prompt to find out which metavariables are still to be solved (or, more precisely, which functions exist but have no definitions), then the \texttt{:t} command to see their types:
 
 \begin{lstlisting}[style=stdout]
-*theorems> :m 
+*theorems> :m
 Global metavariables:
         [plusredZ_S,plusredZ_Z]
 
@@ -179,10 +179,10 @@ plusredZ_Z = proof {
 \end{code}
 
 \begin{lstlisting}[style=stdout]
-*theorems> :m 
+*theorems> :m
 Global metavariables:
         [plusredZ_S]
-\end{lstlisting} 
+\end{lstlisting}
 
 \noindent
 The \texttt{:addproof} command, at the interactive prompt, will add the proof to the source file (effectively in an appendix).
@@ -265,7 +265,7 @@ empty1 = hd [] where
 -- not terminating
 empty2 : _|_
 empty2 = empty2
-\end{code} 
+\end{code}
 
 \noindent
 Internally, \Idris{} checks every definition for totality, and we can check at the prompt with the \texttt{:total} command.
@@ -277,7 +277,7 @@ possibly not total due to: empty1#hd
 	not total as there are missing cases
 *theorems> :total empty2
 possibly not total due to recursive path empty2
-\end{lstlisting} 
+\end{lstlisting}
 
 \noindent
 Note the use of the word ``possibly'' --- a totality check can, of course, never be certain due to the undecidability of the halting problem.
@@ -289,8 +289,8 @@ total empty2 : _|_
 empty2 = empty2
 
 Type checking ./theorems.idr
-theorems.idr:25:empty2 is possibly not total due to recursive path empty2 
-\end{lstlisting} 
+theorems.idr:25:empty2 is possibly not total due to recursive path empty2
+\end{lstlisting}
 
 \noindent
 Reassuringly, our proof in Section~\ref{sect:empty} that the zero and successor constructors are disjoint is total:
@@ -298,7 +298,7 @@ Reassuringly, our proof in Section~\ref{sect:empty} that the zero and successor 
 \begin{lstlisting}[style=stdout]
 *theorems> :total disjoint
 Total
-\end{lstlisting} 
+\end{lstlisting}
 
 \noindent
 The totality check is, necessarily, conservative.
@@ -317,7 +317,7 @@ By default, \Idris{} allows all definitions, whether total or not.
 However, it is desirable for functions to be total as far as possible, as this provides a guarantee that they provide a result for all possible inputs, in finite time. It is possible to make total functions a requirement, either:
 
 \begin{itemize}
-\item By using the \texttt{--total} compiler flag.
+\item By using the \verb!--total! compiler flag.
 \item By adding a \texttt{\%default total} directive to a source file.
 All definitions after this will be required to be total, unless explicitly flagged as \texttt{partial}.
 \end{itemize}
@@ -326,7 +326,7 @@ All definitions after this will be required to be total, unless explicitly flagg
 All functions \emph{after} a \texttt{\%default total} declaration are required to be total.
 Correspondingly, after a \texttt{\%default partial} declaration, the requirement is relaxed.
 
-Finally, the compiler flag \texttt{--warnpartial} causes \Idris{} to print a warning for any undeclared partial function.
+Finally, the compiler flag \verb!--warnpartial! causes \Idris{} to print a warning for any undeclared partial function.
 
 \subsubsection{Totality checking issues}
 
@@ -369,7 +369,7 @@ It simply evaluates to its second argument, but also asserts to the totality
 checker that \texttt{y} is structurally smaller than \texttt{x}.  This can be
 used to explain the reasoning for totality if the checker cannot work it out
 itself. The above example can now be written as:
-    
+
 \begin{code}
 total
 qsort : Ord a => List a -> List a
@@ -396,7 +396,3 @@ assert_total x = x
 In general, this function should be avoided, but it can be very useful when
 reasoning about primitives or externally defined functions (for example from
 a C library) where totality can be shown by an external argument.
-
-
-
-

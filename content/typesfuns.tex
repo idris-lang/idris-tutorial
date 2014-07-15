@@ -649,6 +649,13 @@ vec = (2 ** [3, 4])
 \end{code}
 
 \noindent
+If you like, you can write it out the long way, the two are precisely equivalent.
+
+\begin{code}
+vec : Exists Nat (\n => Vect n Int)
+vec = Ex_intro 2 [3, 4]
+\end{code}
+
 The type checker could of course infer the value of the first element from the
 length of the vector.
 We can write an underscore \texttt{\_} in place of values which we expect the type checker to fill in, so the above definition could also be written as:

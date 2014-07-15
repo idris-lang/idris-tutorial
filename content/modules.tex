@@ -115,9 +115,9 @@ Parameters blocks can be nested, and can also include data declarations, in whic
 They may also be dependent types with implicit arguments:
 
 \begin{code}
-parameters (xs : Vect x a, y : Nat)
+parameters (y : Nat, xs : Vect x a)
     data Vects : Type -> Type where
-         MkVects : Vect a y -> Vects a
+         MkVects : Vect y a -> Vects a
   
     append : Vects a -> Vect (x + y) a
     append (MkVects ys) = xs ++ ys
@@ -128,7 +128,7 @@ To use \texttt{Vects} or \texttt{append} outside the block, we must also give th
 Here, we can use placeholders for the values which can be inferred by the type checker:
 
 \begin{lstlisting}[style=stdout]
-*params> show (append _ _ (MkVects [1,2,3] _ [4,5,6]))
+*params> show (append _ _ (MkVects _ [1,2,3] [4,5,6]))
 "[1, 2, 3, 4, 5, 6]" : String
 \end{lstlisting}
 
