@@ -307,9 +307,11 @@ It is a matter of taste whether you want to do this --- sometimes it can help do
 
 \subsubsection{``\texttt{using}'' notation}
 
-Sometimes it is necessary to provide types of implicit arguments where the type checker can not work them out itself.
-This can happen if there is a dependency ordering --- obviously, \texttt{a} and \texttt{n} must be given as arguments above before being used --- or if an implicit argument has a complex type.
-For example, we will need to state the types of the implicit arguments in the following definition, which defines a predicate on vectors:
+Sometimes it is useful to provide types of implicit arguments, particularly
+where there is a dependency ordering, or where the implicit arguments themselves
+have dependencies.
+For example, we may wish to state the types of the implicit arguments
+in the following definition, which defines a predicate on vectors:
 
 \begin{code}
 data Elem : a -> Vect n a -> Type where
