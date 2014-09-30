@@ -38,8 +38,8 @@ Otherwise, it is the sum of two equal \texttt{Nat}s  plus one:
 
 \begin{code}
 data Parity : Nat -> Type where
-   even : Parity (n + n)
-   odd  : Parity (S (n + n))
+   Even : Parity (n + n)
+   Odd  : Parity (S (n + n))
 \end{code}
 
 \noindent
@@ -60,13 +60,13 @@ We can use it to write a function which converts a natural number to a list of b
 natToBin : Nat -> List Bool
 natToBin Z = Nil
 natToBin k with (parity k)
-   natToBin (j + j)     | even = False :: natToBin j
-   natToBin (S (j + j)) | odd  = True  :: natToBin j
+   natToBin (j + j)     | Even = False :: natToBin j
+   natToBin (S (j + j)) | Odd  = True  :: natToBin j
 \end{code}
 
 \noindent
 The value of the result of \texttt{parity k} affects the form of \texttt{k}, because the result of \texttt{parity k} depends on \texttt{k}. 
-So, as well as the patterns for the result of the intermediate computation (\texttt{even} and \texttt{odd}) right of the  \texttt{$\mid$}, we also write how the results affect the other patterns left of the $\mid$.
+So, as well as the patterns for the result of the intermediate computation (\texttt{Even} and \texttt{odd}) right of the  \texttt{$\mid$}, we also write how the results affect the other patterns left of the $\mid$.
 Note that there is a function in the patterns (\texttt{+}) and repeated occurrences of \texttt{j}---this is allowed because another argument has determined the form of these patterns.
 
 We will return to this function in Section~\ref{sect:provisional} to complete the definition of \texttt{parity}.

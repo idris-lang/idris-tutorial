@@ -8,7 +8,7 @@ Equality is built in, but conceptually has the following definition:
 
 \begin{code}
 data (=) : a -> b -> Type where
-   refl : x = x
+   Refl : x = x
 \end{code}
 
 \noindent
@@ -17,10 +17,10 @@ For example:
 
 \begin{code}
 fiveIsFive : 5 = 5
-fiveIsFive = refl
+fiveIsFive = Refl
 
 twoPlusTwo : 2 + 2 = 4
-twoPlusTwo = refl
+twoPlusTwo = Refl
 \end{code}
 
 \subsection{The Empty Type}
@@ -69,7 +69,7 @@ We won't go into details here, but the Curry-Howard correspondence~\cite{howard}
 The proof itself is trivial, because \texttt{plus Z n} normalises to \texttt{n} by the definition of \texttt{plus}:
 
 \begin{code}
-plusReduces n = refl
+plusReduces n = Refl
 \end{code}
 
 \noindent
@@ -78,7 +78,7 @@ The proof also works by recursion on the first argument to \texttt{plus}, namely
 
 \begin{code}
 plusReducesZ : (n:Nat) -> n = plus n Z
-plusReducesZ Z = refl
+plusReducesZ Z = Refl
 plusReducesZ (S k) = cong (plusReducesZ k)
 \end{code}
 
@@ -94,7 +94,7 @@ We can do the same for the reduction behaviour of plus on successors:
 
 \begin{code}
 plusReducesS : (n:Nat) -> (m:Nat) -> S (plus n m) = plus n (S m)
-plusReducesS Z m = refl
+plusReducesS Z m = Refl
 plusReducesS (S k) m = cong (plusReducesS k m)
 \end{code}
 
@@ -157,25 +157,24 @@ In this case, we can normalise the goal with the \texttt{compute} tactic:
 \end{lstlisting}
 
 \noindent
-Now we have to prove that \texttt{Z} equals \texttt{Z}, which is easy to prove by \texttt{refl}.
-To apply a function, such as \texttt{refl}, we use \texttt{refine} which introduces subgoals for each of the function's explicit arguments (\texttt{refl} has none):
+Now we have to prove that \texttt{Z} equals \texttt{Z}, which is easy to prove by \texttt{Refl}.
+To apply a function, such as \texttt{Refl}, we use \texttt{refine} which introduces subgoals for each of the function's explicit arguments (\texttt{Refl} has none):
 
 \begin{lstlisting}[style=stdout]
--plusredZ_Z> refine refl
+-plusredZ_Z> refine Refl
 plusredZ_Z: no more goals
 \end{lstlisting}
 
 \noindent
-Here, we could also have used the \texttt{trivial} tactic, which tries to refine by \texttt{refl}, and if that fails, tries to refine by each name in the local context.
+Here, we could also have used the \texttt{trivial} tactic, which tries to refine by \texttt{Refl}, and if that fails, tries to refine by each name in the local context.
 When a proof is complete, we use the \texttt{qed} tactic to add the proof to the global context, and remove the metavariable from the unsolved metavariables list.
 This also outputs a trace of the proof:
 
 \begin{code}
 -plusredZ_Z> qed
-plusredZ_Z = proof {
-    compute;
-    refine refl;
-}
+plusredZ_Z = proof
+    compute
+    refine Refl
 \end{code}
 
 \begin{lstlisting}[style=stdout]

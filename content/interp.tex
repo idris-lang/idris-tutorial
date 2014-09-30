@@ -42,8 +42,8 @@ Let us look at each constructor in turn.
 
 \begin{code}[caption={Expression representation},label=exprty, float=htp]
 data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
-    stop : HasType fZ (t :: G) t
-    pop  : HasType k G t -> HasType (fS k) (u :: G) t
+    Stop : HasType FZ (t :: G) t
+    Pop  : HasType k G t -> HasType (FS k) (u :: G) t
 
 data Expr : Vect n Ty -> Ty -> Type where
     Var : HasType i G t -> Expr G t
@@ -61,20 +61,20 @@ Variables are represented by a proof of their membership in the context, \texttt
 
 \begin{code}
 data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
-    stop : HasType fZ (t :: G) t
-    pop  : HasType k G t -> HasType (fS k) (u :: G) t
+    Stop : HasType FZ (t :: G) t
+    Pop  : HasType k G t -> HasType (FS k) (u :: G) t
 \end{code}
 
 \noindent
-We can treat \emph{stop} as a proof that the most recently defined variable is well-typed, and \emph{pop n} as a proof that, if the \texttt{n}th most recently defined variable is well-typed, so is the \texttt{n+1}th.
-In practice, this means we use \texttt{stop} to refer to the most recently defined variable, \texttt{pop stop} to refer to the next, and so on, via the \texttt{Var} constructor:
+We can treat \emph{Stop} as a proof that the most recently defined variable is well-typed, and \emph{Pop n} as a proof that, if the \texttt{n}th most recently defined variable is well-typed, so is the \texttt{n+1}th.
+In practice, this means we use \texttt{Stop} to refer to the most recently defined variable, \texttt{Pop Stop} to refer to the next, and so on, via the \texttt{Var} constructor:
 
 \begin{code}
 Var : HasType i G t -> Expr G t
 \end{code}
 
 \noindent
-So, in an expression \texttt{$\backslash$x. $\backslash$y. x y},  the variable \texttt{x} would have a de Bruijn index of 1, represented as \texttt{pop stop}, and \texttt{y 0}, represented as \texttt{stop}.
+So, in an expression \texttt{$\backslash$x. $\backslash$y. x y},  the variable \texttt{x} would have a de Bruijn index of 1, represented as \texttt{Pop Stop}, and \texttt{y 0}, represented as \texttt{Stop}.
 We find these by counting the number of lambdas between the definition and the use.
 
 \noindent
@@ -128,8 +128,8 @@ data Env : Vect n Ty -> Type where
     (::) : interpTy a -> Env G -> Env (a :: G)
 
 lookup : HasType i G t -> Env G -> interpTy t
-lookup stop    (x :: xs) = x
-lookup (pop k) (x :: xs) = lookup k xs
+lookup Stop    (x :: xs) = x
+lookup (Pop k) (x :: xs) = lookup k xs
 \end{code}
 
 \begin{code}[caption={Intepreter definition},label=interpdef]
@@ -197,7 +197,7 @@ We can make some simple test functions. Firstly, adding two inputs
 
 \begin{code}
 add : Expr G (TyFun TyInt (TyFun TyInt TyInt))
-add = Lam (Lam (Op (+) (Var stop) (Var (pop stop))))
+add = Lam (Lam (Op (+) (Var Stop) (Var (Pop Stop))))
 \end{code}
 
 \noindent
@@ -206,9 +206,9 @@ More interestingly, we can write a factorial function, where
 
 \begin{code}
 fact : Expr G (TyFun TyInt TyInt)
-fact = Lam (If (Op (==) (Var stop) (Val 0))
-               (Val 1) (Op (*) (App fact (Op (-) (Var stop) (Val 1))) 
-                               (Var stop)))
+fact = Lam (If (Op (==) (Var Stop) (Val 0))
+               (Val 1) (Op (*) (App fact (Op (-) (Var Stop) (Val 1))) 
+                               (Var Stop)))
 \end{code}
 
 \noindent

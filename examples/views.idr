@@ -1,21 +1,21 @@
 module views
 
 data Parity : Nat -> Type where
-   even : Parity (n + n)
-   odd  : Parity (S (n + n))
+   Even : Parity (n + n)
+   Odd  : Parity (S (n + n))
 
 parity : (n:Nat) -> Parity n
-parity Z     = even {n=Z}
-parity (S Z) = odd {n=Z}
+parity Z     = Even {n=Z}
+parity (S Z) = Odd {n=Z}
 parity (S (S k)) with (parity k)
-  parity (S (S (j + j)))     | even ?= even {n=S j}
-  parity (S (S (S (j + j)))) | odd  ?= odd {n=S j}
+  parity (S (S (j + j)))     | Even ?= Even {n=S j}
+  parity (S (S (S (j + j)))) | Odd  ?= Odd {n=S j}
 
 natToBin : Nat -> List Bool
 natToBin Z = Nil
 natToBin k with (parity k)
-   natToBin (j + j)     | even = False :: natToBin j
-   natToBin (S (j + j)) | odd  = True  :: natToBin j
+   natToBin (j + j)     | Even = False :: natToBin j
+   natToBin (S (j + j)) | Odd  = True  :: natToBin j
 
 
 ---------- Proofs ----------
