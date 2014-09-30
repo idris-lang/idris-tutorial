@@ -14,12 +14,12 @@ using (G : Vect n Ty)
       (::) : interpTy a -> Env G -> Env (a :: G)
 
   data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
-      stop : HasType fZ (t :: G) t
-      pop  : HasType k G t -> HasType (fS k) (u :: G) t
+      Stop : HasType FZ (t :: G) t
+      Pop  : HasType k G t -> HasType (FS k) (u :: G) t
 
   lookup : HasType i G t -> Env G -> interpTy t
-  lookup stop    (x :: xs) = x
-  lookup (pop k) (x :: xs) = lookup k xs
+  lookup Stop    (x :: xs) = x
+  lookup (Pop k) (x :: xs) = lookup k xs
 
   data Expr : Vect n Ty -> Ty -> Type where
       Var : HasType i G t -> Expr G t
@@ -40,20 +40,20 @@ using (G : Vect n Ty)
                                            else interp env e
 
   eId : Expr G (TyFun TyInt TyInt)
-  eId = Lam (Var stop)
+  eId = Lam (Var Stop)
 
   eAdd : Expr G (TyFun TyInt (TyFun TyInt TyInt))
-  eAdd = Lam (Lam (Op (+) (Var stop) (Var (pop stop))))
+  eAdd = Lam (Lam (Op (+) (Var Stop) (Var (Pop Stop))))
 
   eEq : Expr G (TyFun TyInt (TyFun TyInt TyBool))
-  eEq = Lam (Lam (Op (==) (Var stop) (Var (pop stop))))
+  eEq = Lam (Lam (Op (==) (Var Stop) (Var (Pop Stop))))
 
   eDouble : Expr G (TyFun TyInt TyInt)
-  eDouble = Lam (App (App eAdd (Var stop)) (Var stop))
+  eDouble = Lam (App (App eAdd (Var Stop)) (Var Stop))
 
   fact : Expr G (TyFun TyInt TyInt)
-  fact = Lam (If (Op (==) (Var stop) (Val 0))
-                 (Val 1) (Op (*) (App fact (Op (-) (Var stop) (Val 1))) (Var stop)))
+  fact = Lam (If (Op (==) (Var Stop) (Val 0))
+                 (Val 1) (Op (*) (App fact (Op (-) (Var Stop) (Val 1))) (Var Stop)))
 
 testFac : Int
 testFac = interp [] fact 4

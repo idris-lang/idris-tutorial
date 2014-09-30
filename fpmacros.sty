@@ -453,7 +453,7 @@ Program & Version & Instructions & Thunks & Memory Accesses & Cells \\
 \newcommand{\hq}{\pad{\:}{=}}
 \newcommand{\defq}{\mapsto}
 
-\newcommand{\refl}{\TC{refl}}
+\newcommand{\refl}{\TC{Refl}}
 
 
 
@@ -558,7 +558,7 @@ Program & Version & Instructions & Thunks & Memory Accesses & Cells \\
 \newcommand{\Exists}{\DC{Exists}}
 
 \newcommand{\ListPair}[2]{\sig{#1}{\List\:\vA}.#2 = \FN{length}\:#1}
-\newcommand{\lpNilDef}{\lpNil{\FN{refl}\:\Z}}
+\newcommand{\lpNilDef}{\lpNil{\FN{Refl}\:\Z}}
 \newcommand{\lpNil}[1]{(\nil\:\vA,#1)}
 \newcommand{\lpConsDef}[3]{\lpCons{#1}{(\FN{fst\:#2})}{\FN{resp}\:(\FN{snd}\:#2)}}
 \newcommand{\lpCons}[3]{(\cons\:#1\:#2,#3)}
@@ -656,7 +656,7 @@ Program & Version & Instructions & Thunks & Memory Accesses & Cells \\
 
 % Equality
 
-\newcommand{\Refl}{\DC{refl}}
+\newcommand{\Refl}{\DC{Refl}}
 \newcommand{\leZ}{\DC{O_{\le}}}
 \newcommand{\leS}{\DC{S_{\le}}}
 

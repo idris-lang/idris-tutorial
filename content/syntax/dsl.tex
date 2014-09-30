@@ -9,9 +9,9 @@ Recall the factorial program in \texttt{Expr} for example:
 
 \begin{code}
 fact : Expr G (TyFun TyInt TyInt)
-fact = Lam (If (Op (==) (Var stop) (Val 0))
-               (Val 1) (Op (*) (app fact (Op (-) (Var stop) (Val 1))) 
-                               (Var stop)))
+fact = Lam (If (Op (==) (Var Stop) (Val 0))
+               (Val 1) (Op (*) (app fact (Op (-) (Var Stop) (Val 1))) 
+                               (Var Stop)))
 \end{code}
 
 \noindent
@@ -21,13 +21,13 @@ Since this is a particularly useful pattern, \Idris{} provides syntax overloadin
 dsl expr
     lambda      = Lam
     variable    = Var
-    index_first = stop
-    index_next  = pop
+    index_first = Stop
+    index_next  = Pop
 \end{code} 
 
 \noindent
 A \texttt{dsl} block describes how each syntactic construct is represented in an object language.
-Here, in the \texttt{expr} language, any \Idris{} lambda is translated to a \texttt{Lam} constructor; any variable is translated to the \texttt{Var} constructor, using \texttt{pop} and \texttt{stop} to construct the de Bruijn index (i.e., to count how many bindings since the variable itself was bound).
+Here, in the \texttt{expr} language, any \Idris{} lambda is translated to a \texttt{Lam} constructor; any variable is translated to the \texttt{Var} constructor, using \texttt{Pop} and \texttt{Stop} to construct the de Bruijn index (i.e., to count how many bindings since the variable itself was bound).
 It is also possible to overload \texttt{let} in this way. We can now write \texttt{fact} as follows:
 
 \begin{code}

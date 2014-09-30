@@ -246,12 +246,12 @@ They are declared as follows (again, in the prelude):
 
 \begin{code}
 data Fin : Nat -> Type where
-   fZ : Fin (S k)
-   fS : Fin k -> Fin (S k)
+   FZ : Fin (S k)
+   FS : Fin k -> Fin (S k)
 \end{code}
 
 \noindent
-\tDC{fZ} is the zeroth element of a finite set with \texttt{S k} elements; \texttt{fS n} is the \texttt{n+1}th element of a finite set with \texttt{S k} elements.
+\tDC{FZ} is the zeroth element of a finite set with \texttt{S k} elements; \texttt{FS n} is the \texttt{n+1}th element of a finite set with \texttt{S k} elements.
 \tTC{Fin} is indexed by a \tTC{Nat}, which represents the number of elements in the set.
 Obviously we can't construct an element of an empty set, so neither constructor targets \texttt{Fin Z}.
 
@@ -262,8 +262,8 @@ For example, the following function which looks up an element in a \tTC{Vect}, b
 
 \begin{code}
 index : Fin n -> Vect n a -> a
-index fZ     (x :: xs) = x
-index (fS k) (x :: xs) = index k xs
+index FZ     (x :: xs) = x
+index (FS k) (x :: xs) = index k xs
 \end{code}
 
 \noindent
@@ -298,7 +298,7 @@ Any name with a \remph{lower case initial letter} which appears as a parameter o
 Implicit arguments can still be given explicitly in applications, using \texttt{\{a=value\}} and \texttt{\{n=value\}}, for example:
 
 \begin{code}
-index {a=Int} {n=2} fZ (2 :: 3 :: Nil)
+index {a=Int} {n=2} FZ (2 :: 3 :: Nil)
 \end{code}
 
 \noindent
@@ -322,14 +322,14 @@ in the following definition, which defines a predicate on vectors:
 
 \begin{code}
 data Elem : a -> Vect n a -> Type where
-   here :  {x:a} ->   {xs:Vect n a} -> Elem x (x :: xs)
-   there : {x,y:a} -> {xs:Vect n a} -> Elem x xs -> Elem x (y :: xs)
+   Here :  {x:a} ->   {xs:Vect n a} -> Elem x (x :: xs)
+   There : {x,y:a} -> {xs:Vect n a} -> Elem x xs -> Elem x (y :: xs)
 \end{code}
 
 \noindent
 An instance of \texttt{Elem x xs} states that \texttt{x} is an element of
 \texttt{xs}.
-We can construct such a predicate if the required element is \texttt{here}, at the head of the vector, or \texttt{there}, in the tail of the vector.
+We can construct such a predicate if the required element is \texttt{Here}, at the head of the vector, or \texttt{There}, in the tail of the vector.
 For example:
 
 \begin{code}
@@ -337,7 +337,7 @@ testVec : Vect 4 Int
 testVec = 3 :: 4 :: 5 :: 6 :: Nil
 
 inVect : Elem 5 testVec
-inVect = there (there here)
+inVect = There (There Here)
 \end{code}
 
 \noindent
@@ -347,8 +347,8 @@ To avoid this problem, a \texttt{using} block gives the types and ordering of an
 \begin{code}
 using (x:a, y:a, xs:Vect n a)
   data Elem : a -> Vect n a -> Type where
-     here  : Elem x (x :: xs)
-     there : Elem x xs -> Elem x (y :: xs)
+     Here  : Elem x (x :: xs)
+     There : Elem x xs -> Elem x (y :: xs)
 \end{code}
 
 \subsubsection*{Note: Declaration Order and \texttt{mutual} blocks}
@@ -641,11 +641,12 @@ jim = ("Jim", 25, "Cambridge")
 
 \subsubsection*{Dependent Pairs}
 
-Dependent pairs allow the type of the second element of a pair to depend on the value of the first element:
+Dependent pairs allow the type of the second element of a pair to depend on the value of the first element.
+Traditionally, these are referred to as ``sigma types'':
 
 \begin{code}
-data Exists : (A : Type) -> (P : A -> Type) -> Type where
-   Ex_intro : {P : A -> Type} -> (a : A) -> P a -> Exists A P
+data Sigma : (A : Type) -> (P : A -> Type) -> Type where
+   MkSigma : {P : A -> Type} -> (a : A) -> P a -> Sigma A P
 \end{code}
 
 \noindent
@@ -661,8 +662,8 @@ vec = (2 ** [3, 4])
 If you like, you can write it out the long way, the two are precisely equivalent.
 
 \begin{code}
-vec : Exists Nat (\n => Vect n Int)
-vec = Ex_intro 2 [3, 4]
+vec : Sigma Nat (\n => Vect n Int)
+vec = MkSigma 2 [3, 4]
 \end{code}
 
 The type checker could of course infer the value of the first element from the
@@ -712,24 +713,24 @@ filter p (x :: xs) with (filter p xs)
 \noindent
 We will see more on \texttt{with} notation later.
 
-\subsection{\texttt{so}}
+\subsection{\texttt{So}}
 
-The \texttt{so} data type is a predicate on \texttt{Bool} which guarantees that the value is true:
+The \texttt{So} data type is a predicate on \texttt{Bool} which guarantees that the value is true:
 
 \begin{code}
-data so : Bool -> Type where
-    oh : so True
+data So : Bool -> Type where
+    Oh : So True
 \end{code}
 
 \noindent
 This is most useful for providing a static guarantee that a dynamic check has been made.
-For example, we might provide a safe interface to a function which draws a pixel on a graphical display as follows, where \texttt{so (inBounds x y)} guarantees that  the point \texttt{(x,y)} is within the bounds of a $640\times480$ window:
+For example, we might provide a safe interface to a function which draws a pixel on a graphical display as follows, where \texttt{So (inBounds x y)} guarantees that  the point \texttt{(x,y)} is within the bounds of a $640\times480$ window:
 
 \begin{code}
 inBounds : Int -> Int -> Bool
 inBounds x y = x >= 0 && x < 640 && y >= 0 && y < 480
 
-drawPoint : (x : Int) -> (y : Int) -> so (inBounds x y) -> IO ()
+drawPoint : (x : Int) -> (y : Int) -> So (inBounds x y) -> IO ()
 drawPoint x y p = unsafeDrawPoint x y
 \end{code}
 
