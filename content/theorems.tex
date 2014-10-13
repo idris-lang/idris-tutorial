@@ -32,12 +32,12 @@ It is therefore impossible to construct an element of the empty type, at least w
 We can therefore use the empty type to prove that something is impossible, for example zero is never equal to a successor:
 
 \begin{code}
-disjoint : (n : Nat) -> Z = S n -> _|_
+disjoint : (n : Nat) -> Z = S n -> Void
 disjoint n p = replace {P = disjointTy} p ()
   where
     disjointTy : Nat -> Type
     disjointTy Z = ()
-    disjointTy (S k) = _|_
+    disjointTy (S k) = Void
 \end{code}
 
 \noindent
@@ -45,10 +45,10 @@ There is no need to worry too much about how this function works --- essentially
 Here we use it to transform a value of a type which can exist, the empty tuple, to a value of a type which can't, by using a proof of something which can't exist.
 
 Once we have an element of the empty type, we can prove anything.
-\texttt{FalseElim} is defined in the library, to assist with proofs by contradiction.
+\texttt{void} is defined in the library, to assist with proofs by contradiction.
 
 \begin{code}
-FalseElim : _|_ -> a
+void : Void -> a
 \end{code}
 
 \subsection{Simple Theorems}
@@ -256,13 +256,13 @@ Otherwise we could construct an element of the empty type, from which we could p
 
 \begin{code}
 -- making use of 'hd' being partially defined
-empty1 : _|_
+empty1 : Void
 empty1 = hd [] where
     hd : List a -> a
     hd (x :: xs) = x
 
 -- not terminating
-empty2 : _|_
+empty2 : Void
 empty2 = empty2
 \end{code}
 
@@ -284,7 +284,7 @@ The check is, therefore, conservative.
 It is also possible (and indeed advisable, in the case of proofs) to mark functions as total so that it will be a compile time error for the totality check to fail:
 
 \begin{lstlisting}[style=stdout]
-total empty2 : _|_
+total empty2 : Void
 empty2 = empty2
 
 Type checking ./theorems.idr
