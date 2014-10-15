@@ -3,7 +3,7 @@
 \lstdefinestyle{stdout}{%
   xleftmargin=\parindent,
   tabsize=2,
-  basicstyle=\small\ttfamily,
+  basicstyle=\ttfamily\small,
   showstringspaces=false,
   escapechar=^
 }
@@ -11,6 +11,13 @@
 \lstset{%
   style=default,
   showstringspaces=false
+}
+
+\lstdefinestyle{default}{%
+  basicstyle=\ttfamily\small,
+  xleftmargin=\parindent,
+  tabsize=2,
+  breaklines=true
 }
 
 
@@ -45,4 +52,3 @@
 \setlist[compactenum,1]{label=\arabic*}
 \setlist[compactenum,2]{label=\alph*}
 \setlist[compactenum,3]{label=\roman*}
-
