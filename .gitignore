@@ -1,4 +1,4 @@
-idris-tutorial.pdf
+idris-tutorial.*.pdf
 *.ibc
 *.acn
 *.acr
