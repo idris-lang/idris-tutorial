@@ -1,0 +1,25 @@
+\documentclass[pdftex, british, final]{article}
+
+\usepackage[paperheight=9in,
+            paperwidth=6in,
+            margin=.5in]{geometry}
+\usepackage{setspace}
+
+\onehalfspacing
+
+\usepackage{imports}
+
+\lstdefinestyle{default}{%
+  basicstyle=\ttfamily\small,
+}
+
+\lstdefinestyle{stdout}{%
+  xleftmargin=\parindent,
+  tabsize=2,
+  basicstyle=\ttfamily\footnotesize,
+  showstringspaces=false,
+  escapechar=^
+}
+
+
+\input{body.tex}
