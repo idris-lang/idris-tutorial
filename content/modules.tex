@@ -10,7 +10,7 @@ For example, Listing~\ref{bstmod} gives a module which defines a binary tree typ
 \inputIdrisListing[caption={Binary Tree Main Program}, label=bstmain, float=htp]{./examples/bmain.idr}
 
 The same names can be defined in multiple modules.
-This is possible because in practice names are \emph{qualified} with the name of the module. 
+This is possible because in practice names are \emph{qualified} with the name of the module.
 The names defined in the \texttt{btree} module are, in full:
 
 \begin{multicols}{2}
@@ -38,26 +38,25 @@ The only requirement for module names is that the main module, with the \texttt{
 
 By default, all names defined in a module are exported for use by other modules.
 However, it is good practice only to export a minimal interface and keep internal details abstract.
-\Idris{} allows functions, types and classes to be marked as: \texttt{public}, \texttt{abstract} or \texttt{private}:
+\Idris{} allows functions, types, and classes to be marked as: \texttt{public}, \texttt{abstract} or \texttt{private}:
 
 \begin{itemize}
-\item \texttt{public} means that both the name and definition are exported.
+\item\texttt{public} means that both the name and definition are exported.
 For functions, this means that the implementation is exported (which means, for example, it can be used in a dependent type).
 For data types, this means that the type name and the constructors are exported.
 For classes, this means that the class name and method names are exported.
 
-\item
-\texttt{abstract} means that only the name is exported.
+\item\texttt{abstract} means that only the name is exported.
 For functions, this means that the implementation is not exported.
 For data types, this means that the type name is exported but not the constructors.
 For classes, this means that the class name is exported but not the method names.
 
-\item
-\texttt{private} means that neither the name nor the definition is exported.
+\item\texttt{private} means that neither the name nor the definition is exported.
 \end{itemize}
 
 \noindent
-If any definition is given an export modifier, then all names with no modifier are assumed to be \texttt{private}.
+\textbf{Note:} If any definition is given an export modifier, then all names with no modifier are assumed to be \texttt{private}.
+
 For our \texttt{btree} module, it makes sense for the tree data type and the functions to be exported as \texttt{abstract}, as we see in Listing~\ref{bstmodp}.
 
 \inputIdrisListing[caption={Binary Tree Module, with export modifiers}, label=bstmodp]{./examples/btreemod.idr}
@@ -85,9 +84,9 @@ This (admittedly contrived) module defines two functions with fully qualified na
 \texttt{foo.x.test} and \texttt{foo.y.test}, which can be disambiguated by their types:
 
 \begin{lstlisting}[style=stdout]
-*foo> test 3 
+*foo> test 3
 6 : Int
-*foo> test "foo" 
+*foo> test "foo"
 "foofoo" : String
 \end{lstlisting}
 
@@ -118,7 +117,7 @@ They may also be dependent types with implicit arguments:
 parameters (y : Nat, xs : Vect x a)
     data Vects : Type -> Type where
          MkVects : Vect y a -> Vects a
-  
+
     append : Vects a -> Vect (x + y) a
     append (MkVects ys) = xs ++ ys
 \end{code}
@@ -131,4 +130,3 @@ Here, we can use placeholders for the values which can be inferred by the type c
 *params> show (append _ _ (MkVects _ [1,2,3] [4,5,6]))
 "[1, 2, 3, 4, 5, 6]" : String
 \end{lstlisting}
-
