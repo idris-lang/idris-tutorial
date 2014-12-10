@@ -53,7 +53,7 @@
   upquote=true,
   basicstyle=\ttfamily,
   flexiblecolumns=false,
-  commentstyle=\footnotesize\sffamily,
+  commentstyle=\footnotesize\itshape,
 %% ---------------------------------------------------------------- [ Keywords ]
 %% From Idris Parser and idris-mode and vimscript
   keywords={%
@@ -137,6 +137,7 @@
     \ifthenelse{\boolean{literate}}{%
       \lstset{language=literateidris}}{%
       \lstset{language=idris}}
+    \IdrisLineSpacing{}
     \lstinputlisting[#1]{#2}
 \endgroup
 }
