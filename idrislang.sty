@@ -17,7 +17,6 @@
 %%      + \inputIdrisListing[...]{file.idr}
 %%   + Provides definitions (from Idris Compiler) for pretty-printing Idris
 %%     code using Fancy Verbatim and colour commands.
-%%      + Provides shortcuts.
 %%      + Sets commandchars for latex commands.
 %%   + Defines commands typesetting the name Idris.
 %%      + \Idris{}
@@ -58,13 +57,6 @@
 \newcommand{\IdrisKeyword}[1]{{\underline{#1}}}
 \newcommand{\IdrisImplicit}[1]{{\itshape \IdrisBound{#1}}}
 
-\newcommand{\ID}[1]{\IdrisData{#1}}
-\newcommand{\IT}[1]{\IdrisType{#1}}
-\newcommand{\IB}[1]{\IdrisBound{#1}}
-\newcommand{\IF}[1]{\IdrisFunction{#1}}
-\newcommand{\IK}[1]{\IdrisKeyword{#1}}
-\newcommand{\II}[1]{\IdrisImplicit{#1}}
-
 \fvset{commandchars=\\\{\}}
 
 %% --------------------------------------------------- [ Define Idris Listings ]
@@ -76,7 +68,7 @@
   upquote=true,
   basicstyle=\ttfamily,
   flexiblecolumns=false,
-  commentstyle=\footnotesize\sffamily,
+  commentstyle=\footnotesize\itshape,
 %% ---------------------------------------------------------------- [ Keywords ]
 %% From Idris Parser and idris-mode and vimscript
   keywords={%
@@ -160,6 +152,7 @@
     \ifthenelse{\boolean{literate}}{%
       \lstset{language=literateidris}}{%
       \lstset{language=idris}}
+    \IdrisLineSpacing{}
     \lstinputlisting[#1]{#2}
 \endgroup
 }
