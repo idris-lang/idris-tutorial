@@ -15,6 +15,10 @@
 %%      + \begin{code}[...] ... \end{code}
 %%   + Defines an input command for externally defined idris files.
 %%      + \inputIdrisListing[...]{file.idr}
+%%   + Provides definitions (from Idris Compiler) for pretty-printing Idris
+%%     code using Fancy Verbatim and colour commands.
+%%      + Provides shortcuts.
+%%      + Sets commandchars for latex commands.
 %%   + Defines commands typesetting the name Idris.
 %%      + \Idris{}
 %%      + \idris{}
@@ -26,6 +30,8 @@
 \ProvidesPackage{idrislang}
 
 \RequirePackage{ifthen}
+\RequirePackage{xcolor}
+\RequirePackage{fancyvrb}
 \RequirePackage{listings}
 \RequirePackage{xspace}
 \RequirePackage{textcomp}
@@ -44,6 +50,23 @@
 \newcommand{\Idris}{\textsc{Idris}\xspace}
 \newcommand{\idris}{\textsc{Idris}\xspace}
 \newcommand{\IdrisLineSpacing}{\singlespacing}
+%% ---------------------------------------------------------- [ Color Commands ]
+\newcommand{\IdrisData}[1]{\textcolor{red}{#1}}
+\newcommand{\IdrisType}[1]{\textcolor{blue}{#1}}
+\newcommand{\IdrisBound}[1]{\textcolor{magenta}{#1}}
+\newcommand{\IdrisFunction}[1]{\textcolor{green}{#1}}
+\newcommand{\IdrisKeyword}[1]{{\underline{#1}}}
+\newcommand{\IdrisImplicit}[1]{{\itshape \IdrisBound{#1}}}
+
+\newcommand{\ID}[1]{\IdrisData{#1}}
+\newcommand{\IT}[1]{\IdrisType{#1}}
+\newcommand{\IB}[1]{\IdrisBound{#1}}
+\newcommand{\IF}[1]{\IdrisFunction{#1}}
+\newcommand{\IK}[1]{\IdrisKeyword{#1}}
+\newcommand{\II}[1]{\IdrisImplicit{#1}}
+
+\fvset{commandchars=\\\{\}}
+
 %% --------------------------------------------------- [ Define Idris Listings ]
 \lstdefinelanguage{idris}{%
   sensitive,%
