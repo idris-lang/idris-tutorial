@@ -734,6 +734,17 @@ drawPoint : (x : Int) -> (y : Int) -> So (inBounds x y) -> IO ()
 drawPoint x y p = unsafeDrawPoint x y
 \end{code}
 
+\noindent
+A value of type \texttt{So} can be constructed using the \texttt{choose} function from the prelude.
+The \texttt{choose} function takes a boolean and returns an \texttt{Either (So b) (So (not b))}.
+
+\begin{code}
+safeDrawPoint : Int -> Int -> IO ()
+safeDrawPoint x y = case choose (inBounds x y) of
+                      Left p  => drawPoint x y p
+                      Right p => return ()  -- Handle the error here
+\end{code}
+
 
 \subsection{More Expressions}
 
