@@ -3,6 +3,10 @@
 
 In this section, we'll use the features we've seen so far to write a larger example, an interpreter for a simple functional programming language, with variables, function application, binary operators and an \texttt{if...then...else} construct.
 We will use the dependent type system to ensure that any programs which can be represented are well-typed.
+
+\subsection{Representing Languages}
+\label{sect:interp:representation}
+
 First, let us define the types in the language.
 We have integers, booleans, and functions, represented by \texttt{Ty}:
 
@@ -50,9 +54,11 @@ data Expr : Vect n Ty -> Ty -> Type where
     Val : (x : Int) -> Expr G TyInt
     Lam : Expr (a :: G) t -> Expr G (TyFun a t)
     App : Expr G (TyFun a t) -> Expr G a -> Expr G t
-    Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a ->
-          Expr G b -> Expr G c
-    If  : Expr G TyBool -> Lazy (Expr G a) -> Lazy (Expr G a) -> Expr G a
+    Op  : (interpTy a -> interpTy b -> interpTy c) ->
+          Expr G a -> Expr G b -> Expr G c
+    If  : Expr G TyBool ->
+          Lazy (Expr G a) ->
+          Lazy (Expr G a) -> Expr G a
 \end{code}
 
 \noindent
@@ -74,7 +80,7 @@ Var : HasType i G t -> Expr G t
 \end{code}
 
 \noindent
-So, in an expression \texttt{$\backslash$x. $\backslash$y. x y},  the variable \texttt{x} would have a de Bruijn index of 1, represented as \texttt{Pop Stop}, and \texttt{y 0}, represented as \texttt{Stop}.
+So, in an expression \verb!\x,\y. x y!, the variable \texttt{x} would have a de Bruijn index of 1, represented as \texttt{Pop Stop}, and \texttt{y 0}, represented as \texttt{Stop}.
 We find these by counting the number of lambdas between the definition and the use.
 
 \noindent
@@ -103,8 +109,8 @@ App : Expr G (TyFun a t) -> Expr G a -> Expr G t
 We allow arbitrary binary operators, where the type of the operator informs what the types of the arguments must be:
 
 \begin{code}
-Op  : (interpTy a -> interpTy b -> interpTy c) -> Expr G a -> Expr G b ->
-      Expr G c
+Op : (interpTy a -> interpTy b -> interpTy c) ->
+     Expr G a -> Expr G b -> Expr G c
 \end{code}
 
 \noindent
@@ -113,10 +119,15 @@ Each branch must have the same type, and we will evaluate the branches
 lazily so that only the branch which is taken need be evaluated:
 
 \begin{code}
-If  : Expr G TyBool -> Lazy (Expr G a) -> Lazy (Expr G a) -> Expr G a
+If : Expr G TyBool ->
+     Lazy (Expr G a) ->
+     Lazy (Expr G a) ->
+     Expr G a
 \end{code}
 
-\noindent
+\subsection{Writing the Interpreter}
+\label{sec:interp:eval}
+
 When we evaluate an \texttt{Expr}, we'll need to know the values in scope, as well as their types.
 \texttt{Env} is an environment, indexed over the types in scope.
 Since an environment is just another form of list, albeit with a strongly specified connection to the vector of local variable types, we use the usual \texttt{::} and \texttt{Nil} constructors so that we can use the usual list syntax.
@@ -191,9 +202,11 @@ interp env (If x t e)  = if interp env x then interp env t
                                          else interp env e
 \end{code}
 
-\noindent
-We can make some simple test functions. Firstly, adding two inputs
-\texttt{$\backslash$x. $\backslash$y. y + x} is written as follows:
+\subsection{Testing}
+\label{sec:interp:testing}
+
+We can make some simple test functions.
+Firstly, adding two inputs \verb!\x. \y. y + x! is written as follows:
 
 \begin{code}
 add : Expr G (TyFun TyInt (TyFun TyInt TyInt))
@@ -201,17 +214,19 @@ add = Lam (Lam (Op (+) (Var Stop) (Var (Pop Stop))))
 \end{code}
 
 \noindent
-More interestingly, we can write a factorial function, where
-\texttt{fact} (i.e.\ \texttt{$\backslash$x. if (x == 0) then 1 else (fact (x-1) * x)}) is written as follows:
+More interestingly, a factorial function \texttt{fact} (e.g.\ \texttt{$\textbackslash$x. if (x == 0) then 1 else (fact (x-1) * x)}), can be written as:
 
 \begin{code}
 fact : Expr G (TyFun TyInt TyInt)
 fact = Lam (If (Op (==) (Var Stop) (Val 0))
-               (Val 1) (Op (*) (App fact (Op (-) (Var Stop) (Val 1)))
-                               (Var Stop)))
+               (Val 1)
+               (Op (*) (App fact (Op (-) (Var Stop) (Val 1)))
+                       (Var Stop)))
 \end{code}
 
-\noindent
+\subsection{Running}
+\label{sec:interp:running}
+
 To finish, we write a \texttt{main} program which interprets the factorial function on user input:
 
 \begin{code}
