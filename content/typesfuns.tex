@@ -175,8 +175,10 @@ So, for example, the following definitions are legal:
 
 \subsubsection{Vectors}
 
-A standard example of a dependent type is the type of ``lists with length'', conventionally called vectors in the dependent type literature.
-In \Idris{}, we declare vectors as follows\footnote{Note that prior to \Idris{} 0.9.9, the order of the arguments to \texttt{Vect} was reversed.}:
+A standard example of a dependent type is the type of ``lists with length'',
+conventionally called vectors in the dependent type literature.  
+They are available as part of the \Idris{} library, by importing
+\texttt{Data.Vect}, or we can declare them as follows:
 
 \begin{code}
 data Vect : Nat -> Type -> Type where
@@ -189,16 +191,21 @@ Note that we have used the same constructor names as for \tTC{List}.
 Ad-hoc name overloading such as this is accepted by \Idris{}, provided that the names are declared in different namespaces (in practice, normally in different modules).
 Ambiguous constructor names can normally be resolved from context.
 
-This declares a family of types, and so the form of the declaration is rather different from the simple type declarations above.
-We explicitly state the type of the type constructor \tTC{Vect} --- it takes a \tTC{Nat} and a type as an
-argument, where \tTC{Type} stands for the type of types.
-We say that \tTC{Vect} is \emph{indexed} over \tTC{Nat} and \emph{parameterised} by \tTC{Type}.
-Each constructor targets a different part of the family of types. \tDC{Nil} can only be used to construct vectors with zero length, and \tDC{::} to construct vectors with non-zero length.
-In the type of \tDC{::}, we state explicitly that an element of type \texttt{a} and a tail of type \texttt{Vect k a} (i.e., a vector of length \texttt{k}) combine to make a vector of length \texttt{S k}.
+This declares a family of types, and so the form of the declaration is rather
+different from the simple type declarations above.  We explicitly state the
+type of the type constructor \tTC{Vect} --- it takes a \tTC{Nat} and a type as
+an argument, where \tTC{Type} stands for the type of types.  We say that
+\tTC{Vect} is \emph{indexed} over \tTC{Nat} and \emph{parameterised} by
+\tTC{Type}.  Each constructor targets a different part of the family of types.
+\tDC{Nil} can only be used to construct vectors with zero length, and \tDC{::}
+to construct vectors with non-zero length.  In the type of \tDC{::}, we state
+explicitly that an element of type \texttt{a} and a tail of type \texttt{Vect k
+a} (i.e., a vector of length \texttt{k}) combine to make a vector of length
+\texttt{S k}.
 
 We can define functions on dependent types such as \tTC{Vect} in the same way as on simple types such as \tTC{List} and \tTC{Nat} above, by pattern matching.
 The type of a function over \tTC{Vect} will describe what happens to the lengths of the vectors involved.
-For example, \tFN{++}, defined in the library, appends two \tTC{Vect}s:
+For example, \tFN{++}, defined as follows, appends two \tTC{Vect}s:
 
 \begin{code}
 (++) : Vect n a -> Vect m a -> Vect (n + m) a
@@ -211,38 +218,43 @@ The type of \tFN{(++)} states that the resulting vector's length will be the sum
 If we get the definition wrong in such a way that this does not hold, \Idris{} will not accept the definition.
 For example:
 
-\inputIdrisListing{./examples/vbroken.idr}
+\begin{code}
+(++) : Vect n a -> Vect m a -> Vect (n + m) a
+(++) Nil       ys = ys
+(++) (x :: xs) ys = x :: xs ++ xs -- BROKEN
+\end{code}
 
 \noindent
-Which when run through the \Idris{} type checker results in the following:
+When run through the \Idris{} type checker, this results in the following:
 
 \begin{lstlisting}[style=stdout]
 $ idris vbroken.idr --check
-vbroken.idr:3:23:When elaborating right hand side of vapp:
-When elaborating argument xs to constructor Prelude.Vect.:::
+vbroken.idr:9:23:When elaborating right hand side of Vect.++:
+When elaborating an application of constructor Vect.:::
         Can't unify
-                Vect (n + n) a
+                Vect (k + k) a
         with
-                Vect (plus n m) a
+                Vect (plus k m) a
         
         Specifically:
                 Can't unify
-                        plus n n
+                        plus k k
                 with
-                        plus n m
+                        plus k m
 \end{lstlisting}
 
 \noindent
 This error message suggests that there is a length mismatch between two vectors
---- we needed a vector of length \texttt{n + m}, but provided a vector of length
-\texttt{n + n}.
+--- we needed a vector of length \texttt{k + m}, but provided a vector of length
+\texttt{k + k}.
 
 % Note that the terms in the error message have been \emph{normalised}, so in particular \texttt{n + m} has been reduced to \texttt{plus n m}.
 
 \subsubsection{The Finite Sets}
 
 Finite sets, as the name suggests, are sets with a finite number of elements.
-They are declared as follows (again, in the prelude):
+They are available as part of the \Idris{} library, by importing
+\texttt{Data.Fin}, or can be declared as follows:
 
 \begin{code}
 data Fin : Nat -> Type where
@@ -275,6 +287,7 @@ The type checker guarantees that the location is no larger than the length of th
 Note also that there is no case for \texttt{Nil} here.
 This is because it is impossible. Since there is no element of \texttt{Fin Z}, and the location is a \texttt{Fin n}, then \texttt{n} can not be \tDC{Z}.
 As a result, attempting to look up an element in an empty vector would give a compile time type error, since it would force \texttt{n} to be \tDC{Z}.
+
 
 \subsubsection{Implicit Arguments}
 
@@ -712,28 +725,6 @@ filter p (x :: xs) with (filter p xs)
 
 \noindent
 We will see more on \texttt{with} notation later.
-
-\subsection{\texttt{So}}
-
-The \texttt{So} data type is a predicate on \texttt{Bool} which guarantees that the value is true:
-
-\begin{code}
-data So : Bool -> Type where
-    Oh : So True
-\end{code}
-
-\noindent
-This is most useful for providing a static guarantee that a dynamic check has been made.
-For example, we might provide a safe interface to a function which draws a pixel on a graphical display as follows, where \texttt{So (inBounds x y)} guarantees that  the point \texttt{(x,y)} is within the bounds of a $640\times480$ window:
-
-\begin{code}
-inBounds : Int -> Int -> Bool
-inBounds x y = x >= 0 && x < 640 && y >= 0 && y < 480
-
-drawPoint : (x : Int) -> (y : Int) -> So (inBounds x y) -> IO ()
-drawPoint x y p = unsafeDrawPoint x y
-\end{code}
-
 
 \subsection{More Expressions}
 

@@ -6,7 +6,9 @@ Before installing \Idris{}, you will need to make sure you have all of the neces
 You will need:
 
 \begin{itemize}
-\item A fairly recent Haskell platform. Version 2010.1.0.0.1 is currently sufficiently recent.
+\item A fairly recent Haskell platform. Version 2013.2.0.0
+should be sufficiently recent, though it is better to be completely up to
+date.
 \item The \emph{GNU Multiple Precision Arithmetic Library} (GMP) is available from MacPorts and all major Linux distributions.
 \end{itemize}
 
@@ -68,45 +70,10 @@ Idris>
 
 \noindent
 This gives a \texttt{ghci}-style interface which allows evaluation of, as well as type checking of, expressions; theorem proving, compilation; editing; and various other operations.
-The command \texttt{:?} gives a list of supported commands, as shown in Listing~\ref{cmds}.
+The command \texttt{:?} gives a list of supported commands.
 Listing~\ref{run1} shows an example run in which \texttt{hello.idr} is loaded, the type of \texttt{main} is checked and then the program is compiled to the executable \texttt{hello}.
-
-\begin{lstlisting}[caption={Interactive environment commands}, label=cmds, style=stdout, float=htp]
-Idris version ^\version{}^
-----------------------
-
-   Command         Arguments   Purpose
-
-   <expr>                      Evaluate an expression
-   :t              <expr>      Check the type of an expression
-   :miss :missing  <name>      Show missing clauses
-   :doc            <name>      Show internal documentation
-   :i :info        <name>      Display information about a type class
-   :total          <name>      Check the totality of a name
-   :r :reload                  Reload current file
-   :l :load        <filename>  Load a new file
-   :cd             <filename>  Change working directory
-   :m :module      <module>    Import an extra module
-   :e :edit                    Edit current file using $EDITOR or $VISUAL
-   :m :metavars    <metavar>   Show remaining proof obligations (metavariables)
-   :p :prove       <metavar>   Prove a metavariable
-   :a :addproof    <name>      Add proof to source file
-   :rmproof        <name>      Remove proof from proof stack
-   :showproof      <name>      Show proof
-   :proofs                     Show available proofs
-   :x              <expr>      Execute IO actions resulting from an expression
-                               using the interpreter
-   :c :compile     <filename>  Compile to an executable <filename>
-   :js :javascript <filename>  Compile to JavaScript <filename>
-   :exec :execute              Compile to an executable and run
-   :dynamic        <filename>  Dynamically load a C library (similar to %dynamic)
-   :dynamic                    List dynamically loaded C libraries
-   :? :h :help                 Display this help text
-   :set            <option>    Set an option (errorcontext, showimplicits)
-   :unset          <option>    Unset an option
-   :colour :color  <option>    Turn REPL colours on or off; set a specific colour
-   :q :quit                    Exit the Idris system
-\end{lstlisting}
+Type checking a file, if successful, creates a bytecode version of the file (in this case \texttt{hello.ibc}) to speed up loading in future.
+The bytecode is regenerated if the source file changes.
 
 \begin{lstlisting}[caption={Sample Interactive Run}, label=run1, style=stdout, float=htp]
 $ idris hello.idr
@@ -126,6 +93,3 @@ $ ./hello
 Hello world
 \end{lstlisting}
 
-\noindent
-Type checking a file, if successful, creates a bytecode version of the file (in this case \texttt{hello.ibc}) to speed up loading in future.
-The bytecode is regenerated if the source file changes.

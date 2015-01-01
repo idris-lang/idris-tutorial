@@ -72,6 +72,24 @@ Finally, the default export mode can be changed with the \texttt{\%access} direc
 \noindent
 In this case, any function with no access modifier will be exported as \texttt{abstract}, rather than left \texttt{private}.
 
+Additionally, a module can re-export a module it has imported, by using the
+\texttt{public} modifier on an \texttt{import}. For example:
+
+\begin{code}
+module A
+
+import B
+import public C
+
+public a : AType
+a = ...
+\end{code}
+
+\noindent
+The module \texttt{A} will export the name \texttt{a}, as well as any
+public or abstract names in module \texttt{C}, but will not re-export
+anything from module \texttt{B}.
+
 \subsection{Explicit Namespaces}
 
 Defining a module also defines a namespace implicitly.
