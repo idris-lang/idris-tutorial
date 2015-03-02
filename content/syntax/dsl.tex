@@ -41,15 +41,15 @@ In this new version, \texttt{expr} declares that the next expression will be ove
 We can take this further, using idiom brackets, by declaring:
 
 \begin{code}
-(<$>) : |(f : Expr G (TyFun a t)) -> Expr G a -> Expr G t
-(<$>) = \f, a => App f a
+(<*>) : |(f : Expr G (TyFun a t)) -> Expr G a -> Expr G t
+(<*>) = \f, a => App f a
 
 pure : Expr G a -> Expr G a
 pure = id
 \end{code} 
 
 \noindent
-Note that there is no need for these to be part of an instance of \texttt{Applicative}, since idiom bracket notation translates directly to the names \texttt{<\$>} and \texttt{pure}, and ad-hoc type-directed overloading is allowed.
+Note that there is no need for these to be part of an instance of \texttt{Applicative}, since idiom bracket notation translates directly to the names \texttt{<*>} and \texttt{pure}, and ad-hoc type-directed overloading is allowed.
 We can now say:
 
 \begin{code}

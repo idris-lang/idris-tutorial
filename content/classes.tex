@@ -178,11 +178,11 @@ Having defined \texttt{Functor}, we can define \texttt{Applicative}
 which abstracts the notion of function application:
 
 \begin{code}
-infixl 2 <$> 
+infixl 2 <*> 
 
 class Functor f => Applicative (f : Type -> Type) where 
     pure  : a -> f a
-    (<$>) : f (a -> b) -> f a -> f b 
+    (<*>) : f (a -> b) -> f a -> f b 
 \end{code} 
 
 \subsection{Monads and \texttt{do}-notation}
@@ -355,21 +355,21 @@ m_add' x y = m_app (m_app (Just (+)) x) y
 Rather than having to insert \texttt{m\_app} everywhere there is an
 application, we can use \remph{idiom brackets} to do the job for us.  To do
 this, we can make \texttt{Maybe} an instance of \texttt{Applicative} as
-follows, where \texttt{<\$>} is defined in the same way as \texttt{m\_app}
+follows, where \texttt{<\*>} is defined in the same way as \texttt{m\_app}
 above (this is defined in the \Idris{} library):
 
 \begin{code}
 instance Applicative Maybe where
     pure = Just
 
-    (Just f) <$> (Just a) = Just (f a)
-    _        <$> _        = Nothing
+    (Just f) <*> (Just a) = Just (f a)
+    _        <*> _        = Nothing
 \end{code} 
 
 \noindent
 Using \remph{idiom brackets} we can use this instance as follows, where a
 function application \texttt{[| f a1 \dots an |]} is translated into
-\texttt{pure f <\$> a1 <\$> \dots <\$> an}:
+\texttt{pure f <\*> a1 <\*> \dots <\*> an}:
 
 \begin{code}
 m_add' : Maybe Int -> Maybe Int -> Maybe Int
@@ -420,7 +420,7 @@ instance Functor Eval where
 instance Applicative Eval where
     pure x = MkEval (\e => Just x)
 
-    (<$>) (MkEval f) (MkEval g) = MkEval (\x => app (f x) (g x)) where
+    (<*>) (MkEval f) (MkEval g) = MkEval (\x => app (f x) (g x)) where
         app : Maybe (a -> b) -> Maybe a -> Maybe b
         app (Just fx) (Just gx) = Just (fx gx)
         app _         _         = Nothing
