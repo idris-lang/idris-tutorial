@@ -18,17 +18,22 @@ fact = Lam (If (Op (==) (Var Stop) (Val 0))
 Since this is a particularly useful pattern, \Idris{} provides syntax overloading~\cite{res-dsl-padl12} to make it easier to program in such object languages:
 
 \begin{code}
+mkLam : TTName -> Expr (t::g) t' -> Expr g (TyFun t t')
+mkLam _ body = Lam body
+
 dsl expr
-    lambda      = Lam
     variable    = Var
     index_first = Stop
     index_next  = Pop
+    lambda      = mkLam
 \end{code} 
 
 \noindent
 A \texttt{dsl} block describes how each syntactic construct is represented in an object language.
-Here, in the \texttt{expr} language, any \Idris{} lambda is translated to a \texttt{Lam} constructor; any variable is translated to the \texttt{Var} constructor, using \texttt{Pop} and \texttt{Stop} to construct the de Bruijn index (i.e., to count how many bindings since the variable itself was bound).
-It is also possible to overload \texttt{let} in this way. We can now write \texttt{fact} as follows:
+Here, in the \texttt{expr} language, any variable is translated to the \texttt{Var} constructor, using \texttt{Pop} and \texttt{Stop} to construct the de Bruijn index (i.e., to count how many bindings since the variable itself was bound); and any \Idris{} lambda is translated to a \texttt{Lam} constructor.
+The \texttt{mkLam} function simply ignores its first argument, which is the name that the user chose for the variable.
+It is also possible to overload \texttt{let} and dependent function syntax (\texttt{pi}) in this way.
+We can now write \texttt{fact} as follows:
 
 \begin{code}
 fact : Expr G (TyFun TyInt TyInt)
@@ -41,8 +46,8 @@ In this new version, \texttt{expr} declares that the next expression will be ove
 We can take this further, using idiom brackets, by declaring:
 
 \begin{code}
-(<$>) : |(f : Expr G (TyFun a t)) -> Expr G a -> Expr G t
-(<$>) = \f, a => App f a
+(<$>) : (f : Lazy (Expr G (TyFun a t))) -> Expr G a -> Expr G t
+(<$>) f a = App f a
 
 pure : Expr G a -> Expr G a
 pure = id
