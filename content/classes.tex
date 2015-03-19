@@ -495,3 +495,21 @@ with the \texttt{| m} after the class declaration. We call \texttt{m}
 a \emph{determining parameter} of the \texttt{MonadState} class, because it
 is the parameter used to resolve an instance. 
 
+When checking for overlapping instances, only the determining parameters
+are taken into account. For example, given a class:
+
+\begin{code}
+class Forget a b | a where
+    forget : a -> b
+\end{code}
+
+\noindent
+The following instances are considered overlapping, because they have
+the same determining parameter:
+
+\begin{code}
+instance Forget Float Int
+instance Forget Float Integer
+\end{code}
+
+
